@@ -60,7 +60,7 @@ public class CitaModel extends Conexion {
 	            cs.setDate(3, c.getFecha());
 	            cs.setString(4, c.getHora());
 	            cs.setString(5, c.getEstado());
-	            cs.setString(7,c.getObservacion());
+	            cs.setString(6,c.getObservacion());
 	            filas = cs.executeUpdate();
 	        } catch (Exception e) {
 	            e.printStackTrace();
