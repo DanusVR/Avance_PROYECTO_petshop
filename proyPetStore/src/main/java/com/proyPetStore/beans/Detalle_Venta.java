@@ -3,19 +3,21 @@ package com.proyPetStore.beans;
 public class Detalle_Venta {
 	private Integer id_detalle;
 	private Integer id_venta;
-	private Integer id_producto;
-	private Integer id_servicio;
+	private Integer id_producto; // null si es solo servicio
+	private Integer id_servicio;// null si es solo producto
 	private Integer cantidad;
 	private Double precio;
 	private Double subtotal;
-	
-	private String nombre;
+
+
+	private String nombre_producto;
+	private String nombre_servicio;
 
 	public Detalle_Venta() {
 	}
 
 	public Detalle_Venta(Integer id_detalle, Integer id_venta, Integer id_producto, Integer id_servicio,
-			Integer cantidad, Double precio, Double subtotal, String nombre) {
+			Integer cantidad, Double precio, Double subtotal, String nombre_producto, String nombre_servicio) {
 		this.id_detalle = id_detalle;
 		this.id_venta = id_venta;
 		this.id_producto = id_producto;
@@ -23,7 +25,8 @@ public class Detalle_Venta {
 		this.cantidad = cantidad;
 		this.precio = precio;
 		this.subtotal = subtotal;
-		this.nombre = nombre;
+		this.nombre_producto = nombre_producto;
+		this.nombre_servicio = nombre_servicio;
 	}
 
 	public Integer getId_detalle() {
@@ -82,15 +85,21 @@ public class Detalle_Venta {
 		this.subtotal = subtotal;
 	}
 
-	public String getNombre() {
-		return nombre;
+	public String getNombre_producto() {
+		return nombre_producto;
 	}
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
+	public void setNombre_producto(String nombre_producto) {
+		this.nombre_producto = nombre_producto;
 	}
-	
 
-	
+	public String getNombre_servicio() {
+		return nombre_servicio;
+	}
+
+	public void setNombre_servicio(String nombre_servicio) {
+		this.nombre_servicio = nombre_servicio;
+	}
+
 	
 }

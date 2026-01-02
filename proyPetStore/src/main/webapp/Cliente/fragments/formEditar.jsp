@@ -51,7 +51,7 @@ if (cliente == null) {
 
 					<div class="mb-3">
 						<label class="form-label">Nombre del Cliente</label> <input
-							type="text" name="nombre" id="nombre"
+							type="text" name="nombreC" id="nombreC"
 							value="<%=cliente.getNombreC()!= null ? cliente.getNombreC() : ""%>"
 							class="form-control" required>
 					</div>

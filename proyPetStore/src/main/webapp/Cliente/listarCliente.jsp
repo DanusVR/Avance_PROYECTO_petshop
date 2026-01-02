@@ -56,9 +56,11 @@
 							<td><%=cliente.getTelefono()%></td>
 							<td><%=cliente.getDireccion()%></td>
 							<td class="acciones">
+							<!--  -->
 								<button
 									onclick="modalCliente.abrir('editar', <%=cliente.getId_cliente()%>)"
-									class="btn btn-warning btn-sm">Editar</button> <a
+									class="btn btn-warning btn-sm">Editar</button> 
+									<a
 								href="<%=request.getContextPath()%>/ClienteController?op=eliminar&id=<%=cliente.getId_cliente()%>"
 								class="btn btn-danger btn-sm"
 								onclick="return confirm('¿Seguro de eliminar este cliente?')">

@@ -2,6 +2,7 @@ package com.proyPetStore.model;
 
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,166 +11,197 @@ import com.proyPetStore.util.Conexion;
 
 public class UsuarioModel extends Conexion {
 
-	CallableStatement cs;
-	ResultSet rs;
-	// ===============================
-	// AUTENTICAR USUARIO
-	// ===============================
-	public Usuario autenticarUsuario(String user, String pass) {
-		Usuario u = null;
-		try {
-			String sql = "CALL sp_autenticarUsuario(?,?)";
-			this.abrirConexion();
-			cs = conexion.prepareCall(sql);
-			cs.setString(1, user);
-			cs.setString(2, pass);
-			rs = cs.executeQuery();
+	 CallableStatement cs;
+	    ResultSet rs;
 
-			if (rs.next()) {
-				u = new Usuario();
-				u.setId_usuario(rs.getInt("id_usuario"));
-				u.setNombre(rs.getString("nombre"));
-				u.setUsuario(rs.getString("usuario"));
-				u.setClave(rs.getString("clave"));
-				u.setRol(rs.getString("rol"));
-				u.setEstado(rs.getString("estado"));
-			}
+	    /**
+	     * Autentica un usuario
+	     */
+	    public Usuario autenticarUsuario(String nombreUsuario, String password) {
+	        Usuario usuario = null;
+	        try {
+	            String sql = "CALL sp_autenticarUsuario(?,?)";
+	            this.abrirConexion();
+	            cs = conexion.prepareCall(sql);
+	            cs.setString(1, nombreUsuario);
+	            cs.setString(2, password);
+	            rs = cs.executeQuery();
+	            
+	            if (rs.next()) {
+	                usuario = new Usuario();
+	                usuario.setIdUsuario(rs.getInt("idusuario"));
+	                usuario.setNombreUsuario(rs.getString("nombre_usuario"));
+	                usuario.setNombreCompleto(rs.getString("nombre_completo"));
+	                usuario.setEmail(rs.getString("email"));
+	                usuario.setRol(rs.getString("rol"));
+	                usuario.setEstado(rs.getString("estado"));
+	            }
+	            
+	            this.cerrarConexion();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	            this.cerrarConexion();
+	        }
+	        return usuario;
+	    }
 
-			this.cerrarConexion();
-		} catch (Exception e) {
-			e.printStackTrace();
-			this.cerrarConexion();
-		}
-		return u;
-	}
+	    /**
+	     * Lista todos los usuarios
+	     */
+	    public List<Usuario> listarUsuarios() {
+	        try {
+	            ArrayList<Usuario> usuarios = new ArrayList<>();
+	            String sql = "CALL sp_listarUsuarios()";
+	            this.abrirConexion();
+	            cs = conexion.prepareCall(sql);
+	            rs = cs.executeQuery();
+	            
+	            while (rs.next()) {
+	                Usuario usuario = new Usuario();
+	                usuario.setIdUsuario(rs.getInt("idusuario"));
+	                usuario.setNombreUsuario(rs.getString("nombre_usuario"));
+	                usuario.setNombreCompleto(rs.getString("nombre_completo"));
+	                usuario.setEmail(rs.getString("email"));
+	                usuario.setRol(rs.getString("rol"));
+	                usuario.setEstado(rs.getString("estado"));
+	                usuario.setFechaCreacion(rs.getTimestamp("fecha_creacion"));
+	                usuarios.add(usuario);
+	            }
+	            
+	            this.cerrarConexion();
+	            return usuarios;
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	            this.cerrarConexion();
+	            return null;
+	        }
+	    }
 
-	// ===============================
-	// LISTAR USUARIOS
-	// ===============================
-	public List<Usuario> listarUsuarios() {
-		List<Usuario> lista = new ArrayList();
-		try {
-			String sql = "CALL sp_listarUsuarios()";
-			this.abrirConexion();
-			cs = conexion.prepareCall(sql);
-			rs = cs.executeQuery();
+	    /**
+	     * Inserta un nuevo usuario
+	     */
+	    public int insertarUsuario(Usuario usuario) {
+	        try {
+	            int filasAfectadas = 0;
+	            String sql = "CALL sp_insertarUsuario(?,?,?,?,?)";
+	            
+	            this.abrirConexion();
+	            cs = conexion.prepareCall(sql);
+	            cs.setString(1, usuario.getNombreUsuario());
+	            cs.setString(2, usuario.getPassword());
+	            cs.setString(3, usuario.getNombreCompleto());
+	            cs.setString(4, usuario.getEmail());
+	            cs.setString(5, usuario.getRol());
+	            filasAfectadas = cs.executeUpdate();
+	            this.cerrarConexion();
+	            return filasAfectadas;
+	            
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	            this.cerrarConexion();
+	            return 0;
+	        }
+	    }
 
-			while (rs.next()) {
-				Usuario u = new Usuario();
-				u.setId_usuario(rs.getInt("id_usuario"));
-				u.setNombre(rs.getString("nombre"));
-				u.setUsuario(rs.getString("usuario"));
-				u.setClave(rs.getString("clave"));
-				u.setRol(rs.getString("rol"));
-				u.setEstado(rs.getString("estado"));
-				lista.add(u);
-			}
+	    /**
+	     * Obtiene un usuario por ID
+	     */
+	    public Usuario obtenerUsuario(int idUsuario) {
+	        Usuario usuario = new Usuario();
+	        try {
+	            String sql = "CALL sp_obtenerUsuario(?)";
+	            this.abrirConexion();
+	            cs = conexion.prepareCall(sql);
+	            cs.setInt(1, idUsuario);
+	            rs = cs.executeQuery();
+	            
+	            if (rs.next()) {
+	                usuario.setIdUsuario(rs.getInt("idusuario"));
+	                usuario.setNombreUsuario(rs.getString("nombre_usuario"));
+	                usuario.setNombreCompleto(rs.getString("nombre_completo"));
+	                usuario.setEmail(rs.getString("email"));
+	                usuario.setRol(rs.getString("rol"));
+	                usuario.setEstado(rs.getString("estado"));
+	                usuario.setFechaCreacion(rs.getTimestamp("fecha_creacion"));
+	            }
+	            this.cerrarConexion();
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            this.cerrarConexion();
+	            return null;
+	        }
+	        return usuario;
+	    }
 
-			this.cerrarConexion();
-		} catch (Exception e) {
-			e.printStackTrace();
-			this.cerrarConexion();
-		}
-		return lista;
-	}
+	    /**
+	     * Modifica un usuario
+	     */
+	    public int modificarUsuario(Usuario usuario) {
+	        try {
+	            int filasAfectadas = 0;
+	            String sql = "CALL sp_modificarUsuario(?,?,?,?,?,?)";
+	            this.abrirConexion();
+	            cs = conexion.prepareCall(sql);
+	            cs.setInt(1, usuario.getIdUsuario());
+	            cs.setString(2, usuario.getNombreUsuario());
+	            cs.setString(3, usuario.getNombreCompleto());
+	            cs.setString(4, usuario.getEmail());
+	            cs.setString(5, usuario.getRol());
+	            cs.setString(6, usuario.getEstado());
+	            filasAfectadas = cs.executeUpdate();
+	            
+	            this.cerrarConexion();
+	            return filasAfectadas;
+	            
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	            this.cerrarConexion();
+	            return 0;
+	        }
+	    }
 
-	// ===============================
-	// INSERTAR USUARIO
-	// ===============================
-	public int insertarUsuario(Usuario u) {
-		int filas = 0;
-		try {
-			String sql = "CALL sp_insertarUsuario(?,?,?,?,?)";
-			this.abrirConexion();
-			cs = conexion.prepareCall(sql);
-			cs.setString(1, u.getNombre());
-			cs.setString(2, u.getUsuario());
-			cs.setString(3, u.getClave());
-			cs.setString(4, u.getRol());
-			cs.setString(5, u.getEstado());
-			filas = cs.executeUpdate();
+	    /**
+	     * Cambia la contraseña de un usuario
+	     */
+	    public int cambiarPassword(int idUsuario, String passwordNueva) {
+	        try {
+	            int filasAfectadas = 0;
+	            String sql = "CALL sp_cambiarPassword(?,?)";
+	            this.abrirConexion();
+	            cs = conexion.prepareCall(sql);
+	            cs.setInt(1, idUsuario);
+	            cs.setString(2, passwordNueva);
+	            filasAfectadas = cs.executeUpdate();
+	            
+	            this.cerrarConexion();
+	            return filasAfectadas;
+	            
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	            this.cerrarConexion();
+	            return 0;
+	        }
+	    }
 
-			this.cerrarConexion();
-		} catch (Exception e) {
-			e.printStackTrace();
-			this.cerrarConexion();
-		}
-		return filas;
-	}
-
-	// ===============================
-	// OBTENER USUARIO POR ID
-	// ===============================
-	public Usuario obtenerUsuario(int id) {
-		Usuario u = null;
-		try {
-			String sql = "CALL sp_obtenerUsuario(?)";
-			this.abrirConexion();
-			cs = conexion.prepareCall(sql);
-			cs.setInt(1, id);
-			rs = cs.executeQuery();
-
-			if (rs.next()) {
-				u = new Usuario();
-				u.setId_usuario(rs.getInt("id_usuario"));
-				u.setNombre(rs.getString("nombre"));
-				u.setUsuario(rs.getString("usuario"));
-				u.setClave(rs.getString("clave"));
-				u.setRol(rs.getString("rol"));
-				u.setEstado(rs.getString("estado"));
-				
-			}
-
-			this.cerrarConexion();
-		} catch (Exception e) {
-			e.printStackTrace();
-			this.cerrarConexion();
-		}
-		return u;
-	}
-
-	// ===============================
-	// MODIFICAR USUARIO
-	// ===============================
-	public int modificarUsuario(Usuario u) {
-		int filas = 0;
-		try {
-			String sql = "CALL sp_modificarUsuario(?,?,?,?,?,?)";
-			this.abrirConexion();
-			cs = conexion.prepareCall(sql);
-			cs.setInt(1, u.getId_usuario());
-			cs.setString(2, u.getNombre());
-			cs.setString(3, u.getUsuario());
-			cs.setString(4, u.getClave());
-			cs.setString(5, u.getRol());
-			cs.setString(6, u.getEstado());
-			filas = cs.executeUpdate();
-
-			this.cerrarConexion();
-		} catch (Exception e) {
-			e.printStackTrace();
-			this.cerrarConexion();
-		}
-		return filas;
-	}
-
-	// ===============================
-	// ELIMINAR USUARIO
-	// ===============================
-	public int eliminarUsuario(int id) {
-		int filas = 0;
-		try {
-			String sql = "CALL sp_eliminarUsuario(?)";
-			this.abrirConexion();
-			cs = conexion.prepareCall(sql);
-			cs.setInt(1, id);
-			filas = cs.executeUpdate();
-
-			this.cerrarConexion();
-		} catch (Exception e) {
-			e.printStackTrace();
-			this.cerrarConexion();
-		}
-		return filas;
-	}
+	    /**
+	     * Elimina un usuario
+	     */
+	    public int eliminarUsuario(int idUsuario) {
+	        try {
+	            int filasAfectadas = 0;
+	            String sql = "CALL sp_eliminarUsuario(?)";
+	            this.abrirConexion();
+	            cs = conexion.prepareCall(sql);
+	            cs.setInt(1, idUsuario);
+	            filasAfectadas = cs.executeUpdate();
+	            
+	            this.cerrarConexion();
+	            return filasAfectadas;
+	            
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	            this.cerrarConexion();
+	            return 0;
+	        }
+	    }
 }

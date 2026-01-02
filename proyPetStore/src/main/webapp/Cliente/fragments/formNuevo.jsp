@@ -29,7 +29,7 @@
                 
                 <div class="mb-3">
                     <label class="form-label">Nombre:</label>
-                    <input type="text" id="nombre" name="nombre" class="form-control" required>
+                    <input type="text" id="nombreC" name="nombreC" class="form-control" required>
                 </div>
                  <div class="mb-3">
                     <label class="form-label">Apellido:</label>

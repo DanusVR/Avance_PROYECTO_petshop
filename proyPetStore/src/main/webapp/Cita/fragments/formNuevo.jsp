@@ -81,7 +81,7 @@
             <label class="form-label fw-bold">Estado:</label>
             <select name="estado" id="estado" class="form-select" required>
                 <option value="">Seleccione...</option>
-                <option value="Pendiente">Programada</option>
+                <option value="Pendiente">Pendiente</option>
                 <option value="Atendido">Atendida</option>
                 <option value="Cancelado">Cancelada</option>
             </select>

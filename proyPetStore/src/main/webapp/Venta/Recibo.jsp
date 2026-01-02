@@ -39,6 +39,7 @@
     <table class="table table-bordered">
         <thead class="table-light">
             <tr>
+                <th>Tipo</th>
                 <th>Descripción</th>
                 <th>Cant.</th>
                 <th>Precio</th>
@@ -49,13 +50,16 @@
             <%
                 if (detalles != null && !detalles.isEmpty()) {
                     for (Detalle_Venta d : detalles) {
-                        String nombre = d.getNombre() != null ? d.getNombre() 
-                                : (d.getId_producto() != null && d.getId_producto() > 0 ? "Producto " + d.getId_producto() : "Servicio " + d.getId_servicio());
+                        String tipo = (d.getId_producto() != null && d.getId_producto() > 0) ? "Producto" : "Servicio";
+                        String nombre = (d.getId_producto() != null && d.getId_producto() > 0) 
+                                        ? d.getNombre_producto() 
+                                        : d.getNombre_servicio();
                         int cantidad = d.getCantidad() != null ? d.getCantidad() : 0;
                         double precio = d.getPrecio() != null ? d.getPrecio() : 0.0;
                         double subtotal = d.getSubtotal() != null ? d.getSubtotal() : 0.0;
             %>
             <tr>
+                <td><%= tipo %></td>
                 <td><%= nombre %></td>
                 <td class="text-right"><%= cantidad %></td>
                 <td class="text-right">$<%= String.format("%.2f", precio) %></td>
@@ -64,13 +68,13 @@
             <% } 
                 } else { %>
             <tr>
-                <td colspan="4" class="text-center">No hay detalles para esta venta</td>
+                <td colspan="5" class="text-center">No hay detalles para esta venta</td>
             </tr>
             <% } %>
         </tbody>
     </table>
 
-    <h4 class="text-right">Total: <span class="text-success">$<%= String.format("%.2f", venta.getTotal()) %></span></h4>
+    <h4 class="text-end">Total: <span class="text-success">$<%= String.format("%.2f", venta.getTotal()) %></span></h4>
 
     <div class="text-center mt-3">
         <button class="btn btn-print px-4 py-2" onclick="window.print()">🖨 Imprimir</button>
@@ -79,7 +83,7 @@
 
 <style>
 .ticket { 
-    max-width: 500px; 
+    max-width: 600px; 
     margin: auto; 
     background: white;
     padding: 25px; 

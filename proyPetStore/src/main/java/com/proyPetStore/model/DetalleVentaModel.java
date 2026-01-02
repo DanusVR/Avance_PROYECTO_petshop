@@ -57,7 +57,7 @@ public class DetalleVentaModel extends Conexion {
 	}
 	
 	public List<Detalle_Venta> listarPorVentaporid(int idVenta) {
-	    List<Detalle_Venta> lista = new ArrayList();
+	    List<Detalle_Venta> lista = new ArrayList<>();
 	    try {
 	        String sql = "{CALL sp_listarDetallePorVenta(?)}";
 	        this.abrirConexion();
@@ -68,14 +68,21 @@ public class DetalleVentaModel extends Conexion {
 
 	        while (rs.next()) {
 	            Detalle_Venta d = new Detalle_Venta();
+
+	            int prod = rs.getInt("id_producto");
+	            d.setId_producto(rs.wasNull() ? null : prod);
+
+	            int serv = rs.getInt("id_servicio");
+	            d.setId_servicio(rs.wasNull() ? null : serv);
+
 	            d.setId_detalle(rs.getInt("id_detalle"));
 	            d.setId_venta(rs.getInt("id_venta"));
-	            d.setId_producto(rs.getInt("id_producto"));
-	            d.setId_servicio(rs.getInt("id_servicio"));
 	            d.setCantidad(rs.getInt("cantidad"));
 	            d.setPrecio(rs.getDouble("precio"));
 	            d.setSubtotal(rs.getDouble("subtotal"));
-	            d.setNombre("nombre"); 
+
+	            d.setNombre_producto(rs.getString("nombre_producto"));
+	            d.setNombre_servicio(rs.getString("nombre_servicio"));
 
 	            lista.add(d);
 	        }

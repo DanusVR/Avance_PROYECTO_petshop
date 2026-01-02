@@ -116,14 +116,16 @@ public class CitaController extends HttpServlet {
             } else {
                 request.getSession().setAttribute("mensaje",
                         resultado > 0 ? "Registro exitoso" : "Registro fallido");
-                listar(request, response);
+
+              
+                response.sendRedirect(request.getContextPath() + "/CitaController?op=listar");
             }
+
         } catch (Exception e) {
             e.printStackTrace();
             if (esAjax) enviarJSON(response, false, "Error: " + e.getMessage());
         }
     }
-
     private void modificar(HttpServletRequest request, HttpServletResponse response, boolean esAjax) {
         try {
             Cita c = new Cita();

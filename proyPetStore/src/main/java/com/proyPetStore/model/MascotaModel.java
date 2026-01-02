@@ -120,13 +120,13 @@ public class MascotaModel  extends Conexion{
 		        // Validar especie
 		        String especie = m.getEspecie();
 		        if (!"Perro".equals(especie) && !"Gato".equals(especie)) {
-		            especie = "Perro"; // valor por defecto válido
+		            especie = "Perro"; 
 		        }
 
 		        // Validar sexo
 		        String sexo = m.getSexo();
 		        if (!"Macho".equals(sexo) && !"Hembra".equals(sexo)) {
-		            sexo = "Macho"; // valor por defecto válido
+		            sexo = "Macho"; 
 		        }
 
 		        cs.setInt(1, m.getId_mascota());

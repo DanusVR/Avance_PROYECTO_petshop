@@ -50,7 +50,7 @@
                     <td><%= h.getFecha() %></td>
                     <td>
                         <%= h.getDescripcion() %>
-                        <%-- Marca si fue generado automáticamente por un servicio --%>
+                      
                         <% if(h.getDescripcion() != null && h.getDescripcion().startsWith("Servicio:")) { %>
                             <span class="badge bg-info text-dark">Automático</span>
                         <% } %>

@@ -1,71 +1,100 @@
  package com.proyPetStore.beans;
 
+import java.sql.Timestamp;
+
 public class Usuario {
-	 private int id_usuario;
-	 private String  nombre; 
-	 private String usuario ;
-	 private String  clave;
-	 private String  rol;
-	 private String estado;
-	 	 
-	 public Usuario() {
-	}
+    private int idUsuario;
+    private String nombreUsuario;
+    private String password;
+    private String nombreCompleto;
+    private String email;
+    private String rol;
+    private String estado;
+    private Timestamp fechaCreacion;
+    
+    public Usuario() {
+    }
+    
+    public Usuario(String nombreUsuario, String password, String nombreCompleto, String email, String rol) {
+        this.nombreUsuario = nombreUsuario;
+        this.password = password;
+        this.nombreCompleto = nombreCompleto;
+        this.email = email;
+        this.rol = rol;
+    }
 
-	 public Usuario(int id_usuario, String nombre, String usuario, String clave, String rol, String estado) {
-		this.id_usuario = id_usuario;
-		this.nombre = nombre;
-		this.usuario = usuario;
-		this.clave = clave;
-		this.rol = rol;
-		this.estado = estado;
-	 }
+    // Getters y Setters
+    public int getIdUsuario() {
+        return idUsuario;
+    }
 
-	 public int getId_usuario() {
-		 return id_usuario;
-	 }
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
+    }
 
-	 public void setId_usuario(int id_usuario) {
-		 this.id_usuario = id_usuario;
-	 }
+    public String getNombreUsuario() {
+        return nombreUsuario;
+    }
 
-	 public String getNombre() {
-		 return nombre;
-	 }
+    public void setNombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
+    }
 
-	 public void setNombre(String nombre) {
-		 this.nombre = nombre;
-	 }
+    public String getPassword() {
+        return password;
+    }
 
-	 public String getUsuario() {
-		 return usuario;
-	 }
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	 public void setUsuario(String usuario) {
-		 this.usuario = usuario;
-	 }
+    public String getNombreCompleto() {
+        return nombreCompleto;
+    }
 
-	 public String getClave() {
-		 return clave;
-	 }
+    public void setNombreCompleto(String nombreCompleto) {
+        this.nombreCompleto = nombreCompleto;
+    }
 
-	 public void setClave(String clave) {
-		 this.clave = clave;
-	 }
+    public String getEmail() {
+        return email;
+    }
 
-	 public String getRol() {
-		 return rol;
-	 }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	 public void setRol(String rol) {
-		 this.rol = rol;
-	 }
+    public String getRol() {
+        return rol;
+    }
 
-	 public String getEstado() {
-		 return estado;
-	 }
+    public void setRol(String rol) {
+        this.rol = rol;
+    }
 
-	 public void setEstado(String estado) {
-		 this.estado = estado;
-	 }
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public Timestamp getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(Timestamp fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+    
+    // Método de utilidad
+    public boolean esAdmin() {
+        return "ADMIN".equals(this.rol);
+    }
+    
+    public boolean estaActivo() {
+        return "ACTIVO".equals(this.estado);
+    }
 	
 }

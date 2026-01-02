@@ -101,7 +101,7 @@ public class VentaController extends HttpServlet {
 	                else if (p.getStock() < cant) error = "Stock insuficiente.";
 	                else {
 	                    dv.setId_producto(idProd);
-	                    dv.setNombre(p.getNombre());
+	                    dv.setNombre_producto(p.getNombre());
 	                    dv.setCantidad(cant);
 	                    dv.setPrecio(p.getPrecio_venta());
 	                    dv.setSubtotal(cant * p.getPrecio_venta());
@@ -115,7 +115,7 @@ public class VentaController extends HttpServlet {
 	                if (s == null) error = "Servicio no encontrado.";
 	                else {
 	                    dv.setId_servicio(idServ);
-	                    dv.setNombre(s.getNombre());
+	                    dv.setNombre_servicio(s.getNombre());
 	                    dv.setCantidad(1);
 	                    dv.setPrecio(s.getPrecio());
 	                    dv.setSubtotal(s.getPrecio());
@@ -185,12 +185,12 @@ public class VentaController extends HttpServlet {
 
 	    private void verRecibo(HttpServletRequest request, HttpServletResponse response) {
 	        try {
-	        	response.setContentType("text/html; charset=UTF-8");
+	            response.setContentType("text/html; charset=UTF-8");
 	            int idRecibo = Integer.parseInt(request.getParameter("idVenta"));
 
 	            Venta ventaRecibo = ventaModel.obtenerVentaporId(idRecibo);
 	            List<Detalle_Venta> detallesRecibo = new DetalleVentaModel().listarPorVentaporid(idRecibo);
-	       
+
 	            request.setAttribute("venta", ventaRecibo);
 	            request.setAttribute("detalles", detallesRecibo);
 
@@ -200,6 +200,7 @@ public class VentaController extends HttpServlet {
 	            e.printStackTrace();
 	        }
 	    }
+
 
 	    protected void doGet(HttpServletRequest request, HttpServletResponse response)
 	            throws ServletException, IOException {

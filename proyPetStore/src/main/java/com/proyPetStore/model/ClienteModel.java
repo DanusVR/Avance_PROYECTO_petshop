@@ -17,7 +17,7 @@ public class ClienteModel extends Conexion {
 	public List<Cliente> listarClientes() {
 		List<Cliente> lista = new ArrayList<>();
 		try {
-			String sql = "CALL sp_listarClientes()"; // si quieres crear este procedimiento luego
+			String sql = "CALL sp_listarClientes()"; 
 			this.abrirConexion();
 			cs = conexion.prepareCall(sql);
 			rs = cs.executeQuery();
@@ -41,24 +41,25 @@ public class ClienteModel extends Conexion {
 
 	// Insertar cliente
 	public int insertarClientes(Cliente cliente) {
-		int f = 0;
-		try {
-			String sql = "CALL sp_insertarCliente(?,?,?,?)";
-			this.abrirConexion();
-			cs = conexion.prepareCall(sql);
-			cs.setString(1,cliente.getDni());
-			cs.setString(2, cliente.getNombreC());
-			cs.setString(3, cliente.getApellido());
-			cs.setString(4, cliente.getTelefono());
-			cs.setString(5, cliente.getDireccion());
-			f = cs.executeUpdate();
-			this.cerrarConexion();
-		} catch (Exception e) {
-			e.printStackTrace();
-			this.cerrarConexion();
-		}
-		return f;
+	    int f = 0;
+	    try {
+	        String sql = "CALL sp_insertarCliente(?,?,?,?,?)";
+	        this.abrirConexion();
+	        cs = conexion.prepareCall(sql);
+	        cs.setString(1, cliente.getDni());
+	        cs.setString(2, cliente.getNombreC());
+	        cs.setString(3, cliente.getApellido());
+	        cs.setString(4, cliente.getTelefono());
+	        cs.setString(5, cliente.getDireccion());
+	        f = cs.executeUpdate();
+	        this.cerrarConexion();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        this.cerrarConexion();
+	    }
+	    return f;
 	}
+
 
 	// Obtener cliente por id
 	public Cliente obtenerCliente(int id) {
