@@ -924,14 +924,22 @@ DELIMITER ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_insertarCliente`(
+<<<<<<< HEAD
      IN p_dni VARCHAR(20),
+=======
+	 IN p_dni VARCHAR(20),
+>>>>>>> branch 'main' of https://github.com/DanusVR/Avance_PROYECTO_petshop.git
     IN p_nombre VARCHAR(100),
     IN p_apellido VARCHAR(100),
     IN p_telefono VARCHAR(20),
     IN p_direccion VARCHAR(150)
 )
 BEGIN
+<<<<<<< HEAD
     INSERT INTO cliente (dni, nombreC, apellido, telefono, direccion)
+=======
+     INSERT INTO cliente (dni, nombreC, apellido, telefono, direccion)
+>>>>>>> branch 'main' of https://github.com/DanusVR/Avance_PROYECTO_petshop.git
     VALUES (p_dni, p_nombre, p_apellido, p_telefono, p_direccion);
 
 END ;;

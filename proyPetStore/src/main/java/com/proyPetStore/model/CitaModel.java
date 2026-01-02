@@ -47,7 +47,30 @@ public class CitaModel extends Conexion {
 		return lista;
 	}
 
+<<<<<<< HEAD
 	// Insertar una cita
+=======
+	    public int insertarCita(Cita c) {
+	        int filas = 0;
+	        try {
+	            String sql = "{CALL sp_insertarCita(?, ?, ?, ?, ?,?)}";
+	            this.abrirConexion();
+	            cs = conexion.prepareCall(sql);
+	            cs.setInt(1, c.getId_mascota());
+	            cs.setInt(2, c.getId_servicio());
+	            cs.setDate(3, c.getFecha());
+	            cs.setString(4, c.getHora());
+	            cs.setString(5, c.getEstado());
+	            cs.setString(6,c.getObservacion());
+	            filas = cs.executeUpdate();
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        } finally {
+	            this.cerrarConexion();
+	        }
+	        return filas;
+	    }
+>>>>>>> branch 'main' of https://github.com/DanusVR/Avance_PROYECTO_petshop.git
 
 	public int insertarCita(Cita c) {
 		int filas = 0;

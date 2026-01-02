@@ -98,18 +98,19 @@ public class CitaController extends HttpServlet {
         }
     }
 
-    private void insertar(HttpServletRequest request, HttpServletResponse response, boolean esAjax) {
-        try {
-            Cita c = new Cita();
-            c.setId_mascota(Integer.parseInt(request.getParameter("id_mascota")));
-            c.setId_servicio(Integer.parseInt(request.getParameter("id_servicio")));
-            c.setFecha(Date.valueOf(request.getParameter("fecha")));
-            c.setHora(request.getParameter("hora"));
-            c.setEstado(request.getParameter("estado"));
-            c.setObservacion(request.getParameter("observacion"));
+  private void insertar(HttpServletRequest request, HttpServletResponse response, boolean esAjax) {
+    try {
+        Cita c = new Cita();
+        c.setId_mascota(Integer.parseInt(request.getParameter("id_mascota")));
+        c.setId_servicio(Integer.parseInt(request.getParameter("id_servicio")));
+        c.setFecha(Date.valueOf(request.getParameter("fecha")));
+        c.setHora(request.getParameter("hora"));
+        c.setEstado(request.getParameter("estado"));
+        c.setObservacion(request.getParameter("observacion"));
 
-            int resultado = modelo.insertarCita(c);
+        int resultado = modelo.insertarCita(c);
 
+<<<<<<< HEAD
             if (esAjax) {
                 enviarJSON(response, resultado > 0,
                         resultado > 0 ? "Cita registrada correctamente" : "Error al registrar cita");
@@ -124,7 +125,21 @@ public class CitaController extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             if (esAjax) enviarJSON(response, false, "Error: " + e.getMessage());
+=======
+        if (esAjax) {
+            enviarJSON(response, resultado > 0,
+                    resultado > 0 ? "Cita registrada correctamente" : "Error al registrar cita");
+        } else {
+            request.getSession().setAttribute("mensaje",
+                    resultado > 0 ? "Registro exitoso" : "Registro fallido");
+
+            response.sendRedirect(request.getContextPath() + "/CitaController?op=listar");
+>>>>>>> branch 'main' of https://github.com/DanusVR/Avance_PROYECTO_petshop.git
         }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        if (esAjax) enviarJSON(response, false, "Error: " + e.getMessage());
     }
     private void modificar(HttpServletRequest request, HttpServletResponse response, boolean esAjax) {
         try {
