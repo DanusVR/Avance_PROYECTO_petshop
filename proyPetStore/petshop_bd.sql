@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `petshop_bd` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `petshop_bd`;
 -- MySQL dump 10.13  Distrib 8.0.43, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: petshop_bd
@@ -62,7 +60,7 @@ CREATE TABLE `cita` (
   KEY `id_servicio` (`id_servicio`),
   CONSTRAINT `cita_ibfk_1` FOREIGN KEY (`id_mascota`) REFERENCES `mascota` (`id_mascota`),
   CONSTRAINT `cita_ibfk_2` FOREIGN KEY (`id_servicio`) REFERENCES `servicio` (`id_servicio`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -71,7 +69,7 @@ CREATE TABLE `cita` (
 
 LOCK TABLES `cita` WRITE;
 /*!40000 ALTER TABLE `cita` DISABLE KEYS */;
-INSERT INTO `cita` VALUES (1,1,4,'2025-11-30','09:00 ','Atendido',NULL),(2,1,1,'2025-12-01','10:00','Atendido',NULL),(3,2,2,'2025-12-01','11:30','Atendido',NULL),(4,3,3,'2025-12-02','09:00','Atendido','Vacunas completas'),(5,5,6,'2025-12-03','15:00','Cancelado','Cliente ocupado'),(6,4,3,'2025-12-09','15:03','Atendido',NULL);
+INSERT INTO `cita` VALUES (1,1,4,'2025-11-30','09:00 ','Atendido',NULL),(2,1,1,'2025-12-01','10:00','Atendido',NULL),(3,2,2,'2025-12-01','11:30','Atendido',NULL),(4,3,3,'2025-12-02','09:00','Atendido','vacunas para pulgas'),(5,5,6,'2025-12-03','15:00','Cancelado','Cliente ocupado'),(6,4,3,'2025-12-09','15:03','Atendido',NULL),(8,6,4,'2025-12-16','13:07','Pendiente',''),(9,6,4,'2025-12-16','13:07','Pendiente','');
 /*!40000 ALTER TABLE `cita` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -91,7 +89,7 @@ CREATE TABLE `cliente` (
   `direccion` varchar(150) DEFAULT NULL,
   PRIMARY KEY (`id_cliente`),
   UNIQUE KEY `uq_cliente_nombre` (`nombreC`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -100,8 +98,67 @@ CREATE TABLE `cliente` (
 
 LOCK TABLES `cliente` WRITE;
 /*!40000 ALTER TABLE `cliente` DISABLE KEYS */;
-INSERT INTO `cliente` VALUES (1,'12345678','María','Gómez','987654321','Av.Alamedas'),(2,'87654321','Luis','Ramírez','912345678','Urb San Francisco'),(3,'11223344','Andrea','Torres','922334455','Jr 7 de junio 42'),(4,'76922228','Sharon','Valera','984292010','Urb.San Francisco'),(8,'71345670','Yopi','Fernadez','983456778','Fonavi');
+INSERT INTO `cliente` VALUES (1,'12345678','María','Gómez','987654321','Av.Alamedas'),(2,'87654321','Luis','Ramírez','912345678','Urb San Francisco'),(3,'11223344','Andrea','Torres','922334455','Jr 7 de junio 42'),(4,'76922228','Sharon','Valera','984292010','Urb.San Francisco'),(8,'71345670','Yopi','Fernadez','983456778','Fonavi'),(12,'72235332','Darien','Gonzales','982683060','Calle Faustino Maldona');
 /*!40000 ALTER TABLE `cliente` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `compra`
+--
+
+DROP TABLE IF EXISTS `compra`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `compra` (
+  `id_compra` int NOT NULL AUTO_INCREMENT,
+  `id_proveedor` int NOT NULL,
+  `fecha_compra` date NOT NULL,
+  `total` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `estado` enum('activo','anulado') DEFAULT 'activo',
+  PRIMARY KEY (`id_compra`),
+  KEY `id_proveedor` (`id_proveedor`),
+  CONSTRAINT `compra_ibfk_1` FOREIGN KEY (`id_proveedor`) REFERENCES `proveedor` (`id_proveedor`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `compra`
+--
+
+LOCK TABLES `compra` WRITE;
+/*!40000 ALTER TABLE `compra` DISABLE KEYS */;
+/*!40000 ALTER TABLE `compra` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `compra_detalle`
+--
+
+DROP TABLE IF EXISTS `compra_detalle`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `compra_detalle` (
+  `id_compra_detalle` int NOT NULL AUTO_INCREMENT,
+  `id_compra` int NOT NULL,
+  `id_producto` int NOT NULL,
+  `cantidad` int NOT NULL,
+  `precio_unitario` decimal(10,2) NOT NULL,
+  `subtotal` decimal(10,2) GENERATED ALWAYS AS ((`cantidad` * `precio_unitario`)) STORED,
+  PRIMARY KEY (`id_compra_detalle`),
+  KEY `id_compra` (`id_compra`),
+  KEY `id_producto` (`id_producto`),
+  CONSTRAINT `compra_detalle_ibfk_1` FOREIGN KEY (`id_compra`) REFERENCES `compra` (`id_compra`),
+  CONSTRAINT `compra_detalle_ibfk_2` FOREIGN KEY (`id_producto`) REFERENCES `producto` (`id_producto`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `compra_detalle`
+--
+
+LOCK TABLES `compra_detalle` WRITE;
+/*!40000 ALTER TABLE `compra_detalle` DISABLE KEYS */;
+/*!40000 ALTER TABLE `compra_detalle` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -126,7 +183,7 @@ CREATE TABLE `detalle_venta` (
   CONSTRAINT `detalle_venta_ibfk_1` FOREIGN KEY (`id_venta`) REFERENCES `venta` (`id_venta`),
   CONSTRAINT `detalle_venta_ibfk_2` FOREIGN KEY (`id_producto`) REFERENCES `producto` (`id_producto`),
   CONSTRAINT `detalle_venta_ibfk_3` FOREIGN KEY (`id_servicio`) REFERENCES `servicio` (`id_servicio`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -135,7 +192,7 @@ CREATE TABLE `detalle_venta` (
 
 LOCK TABLES `detalle_venta` WRITE;
 /*!40000 ALTER TABLE `detalle_venta` DISABLE KEYS */;
-INSERT INTO `detalle_venta` VALUES (1,5,NULL,3,1,80.00,80.00),(2,6,NULL,8,1,40.00,40.00);
+INSERT INTO `detalle_venta` VALUES (1,5,NULL,3,1,80.00,80.00),(2,6,NULL,8,1,40.00,40.00),(3,7,4,NULL,2,20.00,40.00),(4,8,2,NULL,2,16.00,32.00),(5,9,NULL,2,1,25.00,25.00),(6,10,NULL,4,1,40.00,40.00);
 /*!40000 ALTER TABLE `detalle_venta` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -185,7 +242,7 @@ CREATE TABLE `mascota` (
   PRIMARY KEY (`id_mascota`),
   KEY `id_cliente` (`id_cliente`),
   CONSTRAINT `mascota_ibfk_1` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`id_cliente`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -194,7 +251,7 @@ CREATE TABLE `mascota` (
 
 LOCK TABLES `mascota` WRITE;
 /*!40000 ALTER TABLE `mascota` DISABLE KEYS */;
-INSERT INTO `mascota` VALUES (1,1,'Bobby ','Perro','Labrador',3,'Macho'),(2,1,'Mishi ','Gato','Angora',2,'Macho'),(3,2,'Rocky (Perro)','Perro','Pitbull',4,'Macho'),(4,3,'Luna (Gato)','Gato','Siames',1,'Hembra'),(5,2,'Skuin (Perro)','Perro','Meztiza',1,'Hembra');
+INSERT INTO `mascota` VALUES (1,1,'Bobby ','Perro','Labrador',3,'Macho'),(2,1,'Mishi ','Gato','Angora',2,'Macho'),(3,2,'Rocky (Perro)','Perro','Pitbull',4,'Macho'),(4,3,'Luna (Gato)','Gato','Siames',1,'Hembra'),(5,2,'Skuin (Perro)','Perro','Meztiza',1,'Hembra'),(6,12,'pelusa','Perro','Meztiza',2,'Hembra'),(7,4,'Boh','Perro','dce',1,'Macho');
 /*!40000 ALTER TABLE `mascota` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -215,7 +272,9 @@ CREATE TABLE `producto` (
   `precio_venta` decimal(10,2) DEFAULT '0.00',
   `estado` enum('Activo','Inactivo') DEFAULT 'Activo',
   `fecha_registro` datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id_producto`)
+  PRIMARY KEY (`id_producto`),
+  KEY `fk_producto_categoria` (`id_categoria`),
+  CONSTRAINT `fk_producto_categoria` FOREIGN KEY (`id_categoria`) REFERENCES `categoria` (`id_categoria`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -225,8 +284,39 @@ CREATE TABLE `producto` (
 
 LOCK TABLES `producto` WRITE;
 /*!40000 ALTER TABLE `producto` DISABLE KEYS */;
-INSERT INTO `producto` VALUES (1,'Dog Chow Adulto 1kg',1,'Perro adulto con croquetas balanceadas',49,10.00,18.50,'Activo','2025-11-29 06:44:20'),(2,'Ricocat Pollo 1kg',1,'Croquetas para perros de pollo',39,8.00,16.00,'Activo','2025-11-29 06:44:20'),(3,'Arena sanitaria 10L',2,'Arena sanitaria para gatos',30,5.00,22.00,'Activo','2025-11-29 06:44:20'),(4,'Collar ajustable azul',3,'Collar ajustable azul para perros',20,3.50,20.00,'Activo','2025-11-29 06:44:20'),(5,'Antipulgas Frontline',2,'Antipulgas Frontline para perros',15,15.00,35.00,'Activo','2025-11-29 06:44:20'),(6,'Vitaminas Caninas',1,'Vitaminas para perros',10,4.00,25.00,'Activo','2025-11-29 06:44:20'),(7,'Ricocat Pescado 2kg',1,'Pescado para perros Ricocat',10,9.00,28.00,'Activo','2025-11-29 06:44:20'),(8,'Collar para gatos pequeños',3,'Collar para gatos pequeños de todas medidas',5,7.00,15.00,'Activo','2025-11-29 06:44:20');
+INSERT INTO `producto` VALUES (1,'Dog Chow Adulto 1kg',1,'Perro adulto con croquetas balanceadas',49,10.00,18.50,'Activo','2025-11-29 06:44:20'),(2,'Ricocat Pollo 1kg',1,'Croquetas para perros de pollo',37,8.00,16.00,'Activo','2025-11-29 06:44:20'),(3,'Arena sanitaria 10L',2,'Arena sanitaria para gatos',30,5.00,22.00,'Activo','2025-11-29 06:44:20'),(4,'Collar ajustable azul',3,'Collar ajustable azul para perros',18,3.50,20.00,'Activo','2025-11-29 06:44:20'),(5,'Antipulgas Frontline',2,'Antipulgas Frontline para perros',15,15.00,35.00,'Activo','2025-11-29 06:44:20'),(6,'Vitaminas Caninas',1,'Vitaminas para perros',10,4.00,25.00,'Activo','2025-11-29 06:44:20'),(7,'Ricocat Pescado 2kg',1,'Pescado para perros Ricocat',10,9.00,28.00,'Activo','2025-11-29 06:44:20'),(8,'Collar para gatos pequeños',3,'Collar para gatos pequeños de todas medidas',5,7.00,15.00,'Activo','2025-11-29 06:44:20');
 /*!40000 ALTER TABLE `producto` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `proveedor`
+--
+
+DROP TABLE IF EXISTS `proveedor`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `proveedor` (
+  `id_proveedor` int NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(100) NOT NULL,
+  `ruc` varchar(20) DEFAULT NULL,
+  `telefono` varchar(20) DEFAULT NULL,
+  `correo` varchar(100) DEFAULT NULL,
+  `direccion` varchar(150) DEFAULT NULL,
+  `tipo` enum('medicina','comida','accesorio','varios') DEFAULT 'varios',
+  `fecha_registro` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `estado` enum('activo','inactivo') DEFAULT 'activo',
+  PRIMARY KEY (`id_proveedor`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `proveedor`
+--
+
+LOCK TABLES `proveedor` WRITE;
+/*!40000 ALTER TABLE `proveedor` DISABLE KEYS */;
+INSERT INTO `proveedor` VALUES (1,'Distribuidora Salud Animal','12345678901','987654321','contacto@saludanimal.com','Av. Principal 123','medicina','2025-12-27 00:23:50','activo'),(2,'Proveedores PetShop','10987654321','987123456','ventas@petshop.com','Jr. 7 Junio 456','comida','2025-12-27 00:23:50','activo'),(3,'Todo para Mascotas','1029384756','987111222','ventas@todo.com','Av. Central 789','accesorio','2025-12-27 00:23:50','activo'),(4,'Mega Pet Supplies','1122334455','987222333','info@megapet.com','Jr. Central 101','varios','2025-12-27 00:23:50','activo');
+/*!40000 ALTER TABLE `proveedor` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -269,13 +359,12 @@ DROP TABLE IF EXISTS `usuarios`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `usuarios` (
   `idusuario` int NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(100) NOT NULL,
   `nombre_usuario` varchar(50) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   `nombre_completo` varchar(100) DEFAULT NULL,
   `email` varchar(100) DEFAULT NULL,
-  `rol` enum('Admin','Empleado') DEFAULT 'Empleado',
-  `estado` enum('Activo','Inactivo') DEFAULT 'Activo',
+  `rol` enum('ADMIN','USUARIO') DEFAULT 'USUARIO',
+  `estado` enum('ACTIVO','INACTIVO') DEFAULT 'ACTIVO',
   `fecha_creacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`idusuario`),
   UNIQUE KEY `usuario` (`nombre_usuario`)
@@ -288,7 +377,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (1,'Administrador General','admin','admin123',NULL,NULL,'Admin','Activo','2025-12-08 04:24:22'),(2,'Denis Rios','drios','rios123',NULL,NULL,'Empleado','Activo','2025-12-08 04:24:22'),(3,'Diana Diaz','dlopez','pass456',NULL,NULL,'Empleado','Inactivo','2025-12-08 04:24:22');
+INSERT INTO `usuarios` VALUES (1,'admin','0192023a7bbd73250516f069df18b500','Administrador','admin@petshop.com','ADMIN','ACTIVO','2025-12-08 04:24:22'),(2,'drios','401cec94d3ed586d8cb895c10c0f7db6','Dario Rios','dario@petshop.com','USUARIO','ACTIVO','2025-12-08 04:24:22'),(3,'dlopez','401cec94d3ed586d8cb895c10c0f7db6','dianaLopez','diana@petshop.com','USUARIO','INACTIVO','2025-12-08 04:24:22');
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -312,7 +401,7 @@ CREATE TABLE `venta` (
   KEY `idusuario` (`idusuario`),
   CONSTRAINT `venta_ibfk_1` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`id_cliente`),
   CONSTRAINT `venta_ibfk_2` FOREIGN KEY (`idusuario`) REFERENCES `usuarios` (`idusuario`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -321,7 +410,7 @@ CREATE TABLE `venta` (
 
 LOCK TABLES `venta` WRITE;
 /*!40000 ALTER TABLE `venta` DISABLE KEYS */;
-INSERT INTO `venta` VALUES (1,3,1,'2025-12-11 22:16:52',18.50,'Efectivo',18.50),(2,2,1,'2025-12-12 16:05:02',55.00,'Yape',55.00),(3,2,1,'2025-12-12 16:12:41',55.00,'Yape',55.00),(4,2,1,'2025-12-12 16:40:28',16.00,'Efectivo',16.00),(5,2,1,'2025-12-12 17:18:09',80.00,'Efectivo',80.00),(6,4,1,'2025-12-12 17:26:13',40.00,'Plin',40.00);
+INSERT INTO `venta` VALUES (1,3,1,'2025-12-11 22:16:52',18.50,'Efectivo',18.50),(2,2,1,'2025-12-12 16:05:02',55.00,'Yape',55.00),(3,2,1,'2025-12-12 16:12:41',55.00,'Yape',55.00),(4,2,1,'2025-12-12 16:40:28',16.00,'Efectivo',16.00),(5,2,1,'2025-12-12 17:18:09',80.00,'Efectivo',80.00),(6,4,1,'2025-12-12 17:26:13',40.00,'Plin',40.00),(7,3,1,'2025-12-15 13:35:38',40.00,'Efectivo',40.00),(8,12,1,'2025-12-15 18:22:49',32.00,'Yape',32.00),(9,3,1,'2025-12-15 19:15:10',25.00,'Yape',25.00),(10,12,1,'2025-12-16 12:12:15',40.00,'Efectivo',40.00);
 /*!40000 ALTER TABLE `venta` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -394,13 +483,15 @@ DELIMITER ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_autenticarUsuario`(
- IN p_usuario VARCHAR(50),
-    IN p_clave VARCHAR(50)
-    )
+    IN p_usuario VARCHAR(50),
+    IN p_password VARCHAR(255)
+)
 BEGIN
-  SELECT *  FROM usuario
-    WHERE usuario = p_usuario
-      AND clave = p_clave;
+    SELECT *
+    FROM usuarios
+    WHERE nombre_usuario = p_usuario
+      AND password = MD5(p_password)
+      AND estado = 'ACTIVO';
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -509,6 +600,29 @@ BEGIN
     INNER JOIN mascota m ON s.id_mascota = m.id_mascota
     WHERE s.id_servicio = p_id;
 
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_cambiarPassword` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_cambiarPassword`(
+ IN p_idusuario INT,
+    IN p_password VARCHAR(255) )
+BEGIN
+  UPDATE usuarios
+    SET password = p_password
+    WHERE idusuario = p_idusuario;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -674,12 +788,13 @@ DELIMITER ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
 /*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+/*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_eliminarUsuario`(IN p_id INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_eliminarUsuario`(
+  IN p_idusuario INT)
 BEGIN
  DELETE FROM usuarios
-    WHERE id_usuario = p_id;
+    WHERE idusuario = p_idusuario;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -809,14 +924,15 @@ DELIMITER ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_insertarCliente`(
+     IN p_dni VARCHAR(20),
     IN p_nombre VARCHAR(100),
     IN p_apellido VARCHAR(100),
     IN p_telefono VARCHAR(20),
     IN p_direccion VARCHAR(150)
 )
 BEGIN
-    INSERT INTO cliente(nombreC,apellido,telefono,direccion)
-    VALUES(p_nombre,p_apellido,p_telefono,p_direccion);
+    INSERT INTO cliente (dni, nombreC, apellido, telefono, direccion)
+    VALUES (p_dni, p_nombre, p_apellido, p_telefono, p_direccion);
 
 END ;;
 DELIMITER ;
@@ -941,18 +1057,33 @@ DELIMITER ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
 /*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+/*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_insertarUsuario`(
-    IN p_nombre VARCHAR(100),
-    IN p_usuario VARCHAR(50),
-    IN p_clave VARCHAR(50),
-    IN p_rol VARCHAR(50),
-    IN p_estado VARCHAR(20)
-    )
+ IN p_nombre_usuario VARCHAR(50),
+    IN p_password VARCHAR(255),
+    IN p_nombre_completo VARCHAR(100),
+    IN p_email VARCHAR(100),
+    IN p_rol ENUM('ADMIN','USUARIO'))
 BEGIN
-    INSERT INTO usuario(nombre, usuario, clave, rol, estado)
-    VALUES(p_nombre, p_usuario, p_clave, p_rol, p_estado);
+  INSERT INTO usuarios (
+        nombre_usuario,
+        password,
+        nombre_completo,
+        email,
+        rol,
+        estado,
+        fecha_creacion
+    )
+    VALUES (
+        p_nombre_usuario,
+        p_password,
+        p_nombre_completo,
+        p_email,
+        p_rol,
+        'ACTIVO',
+        NOW()
+    );
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1132,11 +1263,25 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_listarDetallePorVenta`(IN p_idVenta INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_listarDetallePorVenta`(
+ IN p_idVenta INT)
 BEGIN
-    SELECT *
-    FROM detalle_venta
-    WHERE id_venta = p_idVenta;
+
+    SELECT
+        dv.id_detalle,
+        dv.id_venta,
+        dv.id_producto,
+        dv.id_servicio,
+        dv.cantidad,
+        dv.precio,
+        dv.subtotal,
+        p.nombre AS nombre_producto,
+        s.nombre AS nombre_servicio
+    FROM detalle_venta dv
+    LEFT JOIN producto p ON dv.id_producto = p.id_producto
+    LEFT JOIN servicio s ON dv.id_servicio = s.id_servicio
+    WHERE dv.id_venta = p_idVenta
+    ORDER BY dv.id_detalle;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1207,11 +1352,20 @@ DELIMITER ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
 /*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+/*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_listarUsuarios`()
 BEGIN
- SELECT * FROM usuario;
+    SELECT 
+        idusuario,
+        nombre_usuario,
+        nombre_completo,
+        email,
+        rol,
+        estado,
+        fecha_creacion
+    FROM usuarios;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1313,6 +1467,7 @@ BEGIN
     SELECT s.id_servicio,
            s.nombre,
            s.tipo,
+		   s.fecha_servicio,
            s.id_mascota,
            m.nombre_mascota AS nombreMascota,
            s.descripcion,
@@ -1321,7 +1476,7 @@ BEGIN
     FROM servicio s
     INNER JOIN mascota m ON s.id_mascota = m.id_mascota
     WHERE s.id_mascota = p_idMascota
-    ORDER BY s.id_servicio DESC;
+    ORDER BY s.fecha_servicio DESC;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1537,23 +1692,24 @@ DELIMITER ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
 /*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+/*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_modificarUsuario`(
-    IN p_id INT,
-    IN p_nombre VARCHAR(100),
-    IN p_usuario VARCHAR(50),
-    IN p_clave VARCHAR(50),
-    IN p_rol VARCHAR(50),
-    IN p_estado VARCHAR(20))
+  IN p_idusuario INT,
+    IN p_nombre_usuario VARCHAR(50),
+    IN p_nombre_completo VARCHAR(100),
+    IN p_email VARCHAR(100),
+    IN p_rol ENUM('ADMIN','USUARIO'),
+    IN p_estado ENUM('ACTIVO','INACTIVO'))
 BEGIN
-UPDATE usuario
-    SET nombre = p_nombre,
-        usuario = p_usuario,
-        clave = p_clave,
+ UPDATE usuarios
+    SET 
+        nombre_usuario = p_nombre_usuario,
+        nombre_completo = p_nombre_completo,
+        email = p_email,
         rol = p_rol,
         estado = p_estado
-    WHERE id_usuario = p_id;
+    WHERE idusuario = p_idusuario;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1765,12 +1921,20 @@ DELIMITER ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
 /*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+/*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_obtenerUsuario`(IN p_id INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_obtenerUsuario`( IN p_idusuario INT)
 BEGIN
-SELECT * FROM usuario
-    WHERE id_usuario = p_id;
+  SELECT 
+        idusuario,
+        nombre_usuario,
+        nombre_completo,
+        email,
+        rol,
+        estado,
+        fecha_creacion
+    FROM usuarios
+    WHERE idusuario = p_idusuario;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1838,4 +2002,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-12-15  8:46:50
+-- Dump completed on 2026-01-02 15:33:44
