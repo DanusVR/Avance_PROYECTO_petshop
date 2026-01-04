@@ -28,188 +28,195 @@ import com.proyPetStore.model.VentaModel;
 @WebServlet("/VentaController")
 public class VentaController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
 
-	  private List<Detalle_Venta> listaDetalle = new ArrayList<>();
-	    private VentaModel ventaModel = new VentaModel();
-	    private ProductoModel productoModel = new ProductoModel();
-	    private ServicioModel servicioModel = new ServicioModel();
-	    private ClienteModel clienteModel = new ClienteModel();
+	private List<Detalle_Venta> listaDetalle = new ArrayList<>();
+	private VentaModel ventaModel = new VentaModel();
+	private ProductoModel productoModel = new ProductoModel();
+	private ServicioModel servicioModel = new ServicioModel();
+	private ClienteModel clienteModel = new ClienteModel();
 
-	    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-	            throws ServletException, IOException {
+	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
-	        String accion = request.getParameter("accion");
-	        if (accion == null) 
-	        	accion = "nuevo";
+		String op = request.getParameter("op");
+		if (op == null)
+			op = "nuevo";
 
-	        switch (accion) {
-	            case "nuevo":
-	                mostrarFormulario(request, response);
-	                break;
-	            case "agregar":
-	                agregarDetalle(request);
-	                mostrarFormulario(request, response);
-	                break;
-	            case "registrar":
-	                int idVenta = registrarVenta(request, response); 
-	                if (idVenta > 0) {
-	                    listaDetalle.clear();	                   
-	                    response.sendRedirect(request.getContextPath() + "/Venta/Recibo.jsp?idVenta=" + idVenta);
-	                } else {
-	                    request.setAttribute("error", "No se pudo registrar la venta.");
-	                    mostrarFormulario(request, response);
-	                }
-	                break;
-	            case "listar":
-	                listar(request, response);
-	                break;
-	            case "verRecibo":
-	                verRecibo(request, response);
-	                break;
+		switch (op) {
+			case "nuevo":
+				mostrarFormulario(request, response);
+				break;
+			case "agregar":
+				agregarDetalle(request);
+				mostrarFormulario(request, response);
+				break;
+			case "registrar":
+				int idVenta = registrarVenta(request, response);
+				if (idVenta > 0) {
+					listaDetalle.clear();
+					response.sendRedirect(request.getContextPath() + "/Venta/Recibo.jsp?idVenta=" + idVenta);
+				} else {
+					request.setAttribute("error", "No se pudo registrar la venta.");
+					mostrarFormulario(request, response);
+				}
+				break;
+			case "listar":
+				listar(request, response);
+				break;
+			case "verRecibo":
+				verRecibo(request, response);
+				break;
 
-	            default:
-	                mostrarFormulario(request, response);
-	        }
-	    }
+			default:
+				mostrarFormulario(request, response);
+		}
 
-	    private void mostrarFormulario(HttpServletRequest request, HttpServletResponse response)
-	            throws ServletException, IOException {
-	        request.setAttribute("clientes", clienteModel.listarClientes());
-	        request.setAttribute("productos", productoModel.listarProducto());
-	        request.setAttribute("servicios", servicioModel.listarServicios());
-	        request.setAttribute("detalle", listaDetalle);
+	}
 
-	        double total = listaDetalle.stream().mapToDouble(d -> d.getSubtotal() != null ? d.getSubtotal() : 0).sum();
-	        request.setAttribute("total", total);
+	private void mostrarFormulario(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		request.setAttribute("clientes", clienteModel.listarClientes());
+		request.setAttribute("productos", productoModel.listarProducto());
+		request.setAttribute("servicios", servicioModel.listarServicios());
+		request.setAttribute("detalle", listaDetalle);
 
-	        request.getRequestDispatcher("/Venta/NuevaVenta.jsp").forward(request, response);
-	    }
+		double total = listaDetalle.stream().mapToDouble(d -> d.getSubtotal() != null ? d.getSubtotal() : 0).sum();
+		request.setAttribute("total", total);
 
-	    private void agregarDetalle(HttpServletRequest request) {
-	        String tipo = request.getParameter("tipo");
-	        String error = null;
-	        Detalle_Venta dv = new Detalle_Venta();
+		request.getRequestDispatcher("/Venta/NuevaVenta.jsp").forward(request, response);
+	}
 
-	        try {
-	            if ("producto".equals(tipo)) {
-	                int idProd = Integer.parseInt(request.getParameter("id_Producto"));
-	                int cant = Integer.parseInt(request.getParameter("cantidad"));
-	                Producto p = productoModel.obtenerProducto(idProd);
+	private void agregarDetalle(HttpServletRequest request) {
+		String tipo = request.getParameter("tipo");
+		String error = null;
+		Detalle_Venta dv = new Detalle_Venta();
 
-	                if (p == null) error = "Producto no encontrado.";
-	                else if (p.getStock() < cant) error = "Stock insuficiente.";
-	                else {
-	                    dv.setId_producto(idProd);
-	                    dv.setNombre_producto(p.getNombre());
-	                    dv.setCantidad(cant);
-	                    dv.setPrecio(p.getPrecio_venta());
-	                    dv.setSubtotal(cant * p.getPrecio_venta());
-	                    listaDetalle.add(dv);
-	                }
+		try {
+			if ("producto".equals(tipo)) {
+				int idProd = Integer.parseInt(request.getParameter("id_Producto"));
+				int cant = Integer.parseInt(request.getParameter("cantidad"));
+				Producto p = productoModel.obtenerProducto(idProd);
 
-	            } else if ("servicio".equals(tipo)) {
-	                int idServ = Integer.parseInt(request.getParameter("id_Servicio"));
-	                Servicio s = servicioModel.obtenerServicio(idServ);
+				if (p == null)
+					error = "Producto no encontrado.";
+				else if (p.getStock() < cant)
+					error = "Stock insuficiente.";
+				else {
+					dv.setId_producto(idProd);
+					dv.setNombre_producto(p.getNombre());
+					dv.setCantidad(cant);
+					dv.setPrecio(p.getPrecio_venta());
+					dv.setSubtotal(cant * p.getPrecio_venta());
+					listaDetalle.add(dv);
+				}
 
-	                if (s == null) error = "Servicio no encontrado.";
-	                else {
-	                    dv.setId_servicio(idServ);
-	                    dv.setNombre_servicio(s.getNombre());
-	                    dv.setCantidad(1);
-	                    dv.setPrecio(s.getPrecio());
-	                    dv.setSubtotal(s.getPrecio());
-	                    listaDetalle.add(dv);
-	                }
-	            } else {
-	                error = "Tipo inválido.";
-	            }
-	        } catch (Exception e) {
-	            error = "Datos inválidos.";
-	        }
+			} else if ("servicio".equals(tipo)) {
+				int idServ = Integer.parseInt(request.getParameter("id_Servicio"));
+				Servicio s = servicioModel.obtenerServicio(idServ);
 
-	        if (error != null) request.setAttribute("error", error);
-	    }
+				if (s == null)
+					error = "Servicio no encontrado.";
+				else {
+					dv.setId_servicio(idServ);
+					dv.setNombre_servicio(s.getNombre());
+					dv.setCantidad(1);
+					dv.setPrecio(s.getPrecio());
+					dv.setSubtotal(s.getPrecio());
+					listaDetalle.add(dv);
+				}
+			} else {
+				error = "Tipo inválido.";
+			}
+		} catch (Exception e) {
+			error = "Datos inválidos.";
+		}
 
-	    private int registrarVenta(HttpServletRequest request,HttpServletResponse response) {
-	        if (listaDetalle.isEmpty()) return -1;
+		if (error != null)
+			request.setAttribute("error", error);
+	}
 
-	        try {
-	            String idClienteStr = request.getParameter("id_Cliente");
-	            if (idClienteStr == null || idClienteStr.isEmpty()) return -1;
+	private int registrarVenta(HttpServletRequest request, HttpServletResponse response) {
+		if (listaDetalle.isEmpty())
+			return -1;
 
-	            Venta venta = new Venta();
-	            venta.setId_cliente(Integer.parseInt(idClienteStr));
-	            venta.setIdusuario(1); // Usuario fijo por ahora
-	            venta.setTipo_pago(request.getParameter("tipo_pago"));
+		try {
+			String idClienteStr = request.getParameter("id_Cliente");
+			if (idClienteStr == null || idClienteStr.isEmpty())
+				return -1;
 
-	            String montoStr = request.getParameter("monto_pagado");
-	            venta.setMonto_pagado(montoStr != null && !montoStr.isEmpty() ? Double.parseDouble(montoStr) : 0.0);
+			Venta venta = new Venta();
+			venta.setId_cliente(Integer.parseInt(idClienteStr));
+			venta.setIdusuario(1); // Usuario fijo por ahora
+			venta.setTipo_pago(request.getParameter("tipo_pago"));
 
-	            double total = listaDetalle.stream().mapToDouble(d -> d.getSubtotal() != null ? d.getSubtotal() : 0).sum();
-	            venta.setTotal(total);
+			String montoStr = request.getParameter("monto_pagado");
+			venta.setMonto_pagado(montoStr != null && !montoStr.isEmpty() ? Double.parseDouble(montoStr) : 0.0);
 
-	            int idVenta = ventaModel.insertarVenta(venta);
-	            if (idVenta <= 0) return -1;
+			double total = listaDetalle.stream().mapToDouble(d -> d.getSubtotal() != null ? d.getSubtotal() : 0).sum();
+			venta.setTotal(total);
 
-	            for (Detalle_Venta d : listaDetalle) {
-	                d.setId_venta(idVenta);
-	                if (d.getId_producto() != null && d.getId_producto() > 0) {
-	                    ventaModel.descontarStock(d.getId_producto(), d.getCantidad());
-	                }
-	            }
+			int idVenta = ventaModel.insertarVenta(venta);
+			if (idVenta <= 0)
+				return -1;
 
-	            new DetalleVentaModel().insertarListaDetalles(listaDetalle);
+			for (Detalle_Venta d : listaDetalle) {
+				d.setId_venta(idVenta);
+				if (d.getId_producto() != null && d.getId_producto() > 0) {
+					ventaModel.descontarStock(d.getId_producto(), d.getCantidad());
+				}
+			}
 
-	            return idVenta; 
+			new DetalleVentaModel().insertarListaDetalles(listaDetalle);
 
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	            return -1;
-	        }
-	    }
-	    private void listar(HttpServletRequest request, HttpServletResponse response) {
-	        try {
-	            response.setContentType("text/html; charset=UTF-8");
+			return idVenta;
 
-	            List<Venta> listaVentas = ventaModel.listarVentas();
-	            request.setAttribute("listarVentas", listaVentas);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return -1;
+		}
+	}
 
-	            request.getRequestDispatcher("/Venta/listarVentas.jsp")
-	                   .forward(request, response);
+	private void listar(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			response.setContentType("text/html; charset=UTF-8");
 
-	        } catch (Exception e) {
-	            Logger.getLogger(VentaController.class.getName()).log(Level.SEVERE, null, e);
-	        }
-	    }
+			List<Venta> listaVentas = ventaModel.listarVentas();
+			request.setAttribute("listarVentas", listaVentas);
 
-	    private void verRecibo(HttpServletRequest request, HttpServletResponse response) {
-	        try {
-	            response.setContentType("text/html; charset=UTF-8");
-	            int idRecibo = Integer.parseInt(request.getParameter("idVenta"));
+			request.getRequestDispatcher("/Venta/listarVentas.jsp")
+					.forward(request, response);
 
-	            Venta ventaRecibo = ventaModel.obtenerVentaporId(idRecibo);
-	            List<Detalle_Venta> detallesRecibo = new DetalleVentaModel().listarPorVentaporid(idRecibo);
+		} catch (Exception e) {
+			Logger.getLogger(VentaController.class.getName()).log(Level.SEVERE, null, e);
+		}
+	}
 
-	            request.setAttribute("venta", ventaRecibo);
-	            request.setAttribute("detalles", detallesRecibo);
+	private void verRecibo(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			response.setContentType("text/html; charset=UTF-8");
+			int idRecibo = Integer.parseInt(request.getParameter("idVenta"));
 
-	            request.getRequestDispatcher("/Venta/Recibo.jsp").forward(request, response);
+			Venta ventaRecibo = ventaModel.obtenerVentaporId(idRecibo);
+			List<Detalle_Venta> detallesRecibo = new DetalleVentaModel().listarPorVentaporid(idRecibo);
 
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	        }
-	    }
+			request.setAttribute("venta", ventaRecibo);
+			request.setAttribute("detalles", detallesRecibo);
 
+			request.getRequestDispatcher("/Venta/Recibo.jsp").forward(request, response);
 
-	    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-	            throws ServletException, IOException {
-	        processRequest(request, response);
-	    }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-	    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-	            throws ServletException, IOException {
-	        processRequest(request, response);
-	    }
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		processRequest(request, response);
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		processRequest(request, response);
+	}
 
 }

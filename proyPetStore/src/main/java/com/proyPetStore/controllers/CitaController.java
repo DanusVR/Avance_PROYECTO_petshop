@@ -110,7 +110,6 @@ public class CitaController extends HttpServlet {
 
         int resultado = modelo.insertarCita(c);
 
-<<<<<<< HEAD
             if (esAjax) {
                 enviarJSON(response, resultado > 0,
                         resultado > 0 ? "Cita registrada correctamente" : "Error al registrar cita");
@@ -121,26 +120,13 @@ public class CitaController extends HttpServlet {
               
                 response.sendRedirect(request.getContextPath() + "/CitaController?op=listar");
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (esAjax) enviarJSON(response, false, "Error: " + e.getMessage());
-=======
-        if (esAjax) {
-            enviarJSON(response, resultado > 0,
-                    resultado > 0 ? "Cita registrada correctamente" : "Error al registrar cita");
-        } else {
-            request.getSession().setAttribute("mensaje",
-                    resultado > 0 ? "Registro exitoso" : "Registro fallido");
-
-            response.sendRedirect(request.getContextPath() + "/CitaController?op=listar");
->>>>>>> branch 'main' of https://github.com/DanusVR/Avance_PROYECTO_petshop.git
-        }
+       
 
     } catch (Exception e) {
         e.printStackTrace();
         if (esAjax) enviarJSON(response, false, "Error: " + e.getMessage());
     }
+  }
     private void modificar(HttpServletRequest request, HttpServletResponse response, boolean esAjax) {
         try {
             Cita c = new Cita();
