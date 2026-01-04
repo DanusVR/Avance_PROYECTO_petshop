@@ -88,8 +88,7 @@
 												<button type="submit" class="btn btn-success">💾 Guardar
 													Cambios</button>
 												<button type="button" class="btn btn-secondary"
-													onclick="window.location.href='<%=url%>MascotaController?op=listar'">←
-													Volver a Lista</button>
+													data-bs-dismiss="modal">Cancelar</button>
 											</div>
 									</form>
 								</div>

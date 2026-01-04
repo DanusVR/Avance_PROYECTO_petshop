@@ -76,8 +76,8 @@
                                             Mascota</button>
                                     </form>
 
-                                    <a href="<%=request.getContextPath()%>/MascotaController?op=listar"
-                                        class="btn btn-primary w-100">← Volver a la lista</a>
+                                    <button type="button" class="btn btn-secondary w-100"
+                                        data-bs-dismiss="modal">Cancelar</button>
                                 </div>
                             </div>
                         </div>

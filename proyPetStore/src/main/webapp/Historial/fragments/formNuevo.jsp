@@ -44,8 +44,8 @@
 										Guardar</button>
 								</form>
 
-								<br> <a href="<%=request.getContextPath()%>/HistorialMedicoController?op=listar"
-									class="btn btn-secondary w-100"> ← Volver a la Lista </a>
+								<br> <button type="button" class="btn btn-secondary w-100"
+									data-bs-dismiss="modal">Cancelar</button>
 
 							</div>
 						</div>

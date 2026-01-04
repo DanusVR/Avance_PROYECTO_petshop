@@ -89,8 +89,8 @@
 										<button type="submit" class="btn btn-primary w-100">Guardar</button>
 									</form>
 
-									<br> <a href="<%=request.getContextPath()%>/ProductoController?op=listar"
-										class="btn btn-secondary w-100">Volver a la Lista</a>
+									<br> <button type="button" class="btn btn-secondary w-100"
+										data-bs-dismiss="modal">Cancelar</button>
 								</div>
 							</div>
 						</div>
