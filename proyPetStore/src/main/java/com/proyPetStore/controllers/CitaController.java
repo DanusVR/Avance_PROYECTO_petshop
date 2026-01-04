@@ -61,6 +61,8 @@ public class CitaController extends HttpServlet {
 
     private void listar(HttpServletRequest request, HttpServletResponse response) {
         try {
+            response.setContentType("text/html; charset=UTF-8");
+            System.out.println("Entrando a listar Citas...");
             request.setAttribute("listarCita", modelo.listarCitas());
             request.getRequestDispatcher("/Cita/listarCita.jsp").forward(request, response);
         } catch (Exception e) {
@@ -98,17 +100,17 @@ public class CitaController extends HttpServlet {
         }
     }
 
-  private void insertar(HttpServletRequest request, HttpServletResponse response, boolean esAjax) {
-    try {
-        Cita c = new Cita();
-        c.setId_mascota(Integer.parseInt(request.getParameter("id_mascota")));
-        c.setId_servicio(Integer.parseInt(request.getParameter("id_servicio")));
-        c.setFecha(Date.valueOf(request.getParameter("fecha")));
-        c.setHora(request.getParameter("hora"));
-        c.setEstado(request.getParameter("estado"));
-        c.setObservacion(request.getParameter("observacion"));
+    private void insertar(HttpServletRequest request, HttpServletResponse response, boolean esAjax) {
+        try {
+            Cita c = new Cita();
+            c.setId_mascota(Integer.parseInt(request.getParameter("id_mascota")));
+            c.setId_servicio(Integer.parseInt(request.getParameter("id_servicio")));
+            c.setFecha(Date.valueOf(request.getParameter("fecha")));
+            c.setHora(request.getParameter("hora"));
+            c.setEstado(request.getParameter("estado"));
+            c.setObservacion(request.getParameter("observacion"));
 
-        int resultado = modelo.insertarCita(c);
+            int resultado = modelo.insertarCita(c);
 
             if (esAjax) {
                 enviarJSON(response, resultado > 0,
@@ -117,16 +119,16 @@ public class CitaController extends HttpServlet {
                 request.getSession().setAttribute("mensaje",
                         resultado > 0 ? "Registro exitoso" : "Registro fallido");
 
-              
                 response.sendRedirect(request.getContextPath() + "/CitaController?op=listar");
             }
-       
 
-    } catch (Exception e) {
-        e.printStackTrace();
-        if (esAjax) enviarJSON(response, false, "Error: " + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (esAjax)
+                enviarJSON(response, false, "Error: " + e.getMessage());
+        }
     }
-  }
+
     private void modificar(HttpServletRequest request, HttpServletResponse response, boolean esAjax) {
         try {
             Cita c = new Cita();
@@ -150,48 +152,49 @@ public class CitaController extends HttpServlet {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            if (esAjax) enviarJSON(response, false, "Error: " + e.getMessage());
+            if (esAjax)
+                enviarJSON(response, false, "Error: " + e.getMessage());
         }
     }
 
     private void eliminar(HttpServletRequest request, HttpServletResponse response) {
         try {
-        	response.setContentType("text/html; charset=UTF-8");
-			int id = Integer.parseInt(request.getParameter("id"));
+            response.setContentType("text/html; charset=UTF-8");
+            int id = Integer.parseInt(request.getParameter("id"));
 
-			int resultado = modelo.eliminarCita(id);
-			String mensaje = resultado > 0 ? "cita eliminada exitosamente" : "Error al eliminar cita";
-			request.getSession().setAttribute("mensaje", mensaje);
+            int resultado = modelo.eliminarCita(id);
+            String mensaje = resultado > 0 ? "cita eliminada exitosamente" : "Error al eliminar cita";
+            request.getSession().setAttribute("mensaje", mensaje);
 
-		} catch (Exception e) {
-			Logger.getLogger(CitaController.class.getName()).log(Level.SEVERE, null, e);
-			request.getSession().setAttribute("mensaje", "Error: " + e.getMessage());
-		}
-		listar(request, response);
+        } catch (Exception e) {
+            Logger.getLogger(CitaController.class.getName()).log(Level.SEVERE, null, e);
+            request.getSession().setAttribute("mensaje", "Error: " + e.getMessage());
+        }
+        listar(request, response);
     }
 
     private void enviarJSON(HttpServletResponse response, boolean success, String mensaje) {
-		try {
-			
-			response.reset();
-			
-			response.setContentType("application/json");
-			response.setCharacterEncoding("UTF-8");
-			response.setHeader("Cache-Control", "no-cache");
-			
-			String mensajeLimpio = mensaje.replace("\"", "'").replace("\n", " ").replace("\r", " ");
+        try {
 
-			String json = "{\"success\":" + success + ",\"mensaje\":\"" + mensajeLimpio + "\"}";
-			
-			PrintWriter out = response.getWriter();
-			out.write(json);
-			out.flush();
-			out.close();
+            response.reset();
 
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.setHeader("Cache-Control", "no-cache");
+
+            String mensajeLimpio = mensaje.replace("\"", "'").replace("\n", " ").replace("\r", " ");
+
+            String json = "{\"success\":" + success + ",\"mensaje\":\"" + mensajeLimpio + "\"}";
+
+            PrintWriter out = response.getWriter();
+            out.write(json);
+            out.flush();
+            out.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

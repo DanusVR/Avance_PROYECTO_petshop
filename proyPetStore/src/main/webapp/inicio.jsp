@@ -164,7 +164,11 @@
                 <div class="logo"><i class="fas fa-paw"></i> PETSHOP</div>
                 <div class="menu">
                     <a class="active"><i class="fas fa-chart-line"></i> Dashboard</a>
-
+                    <a id="menuVentas"><i class="fas fa-shopping-cart"></i> Ventas</a>
+                    <div id="submenuVentas" class="submenu">
+                        <a onclick="fetchFragment('/VentaController?op=nuevo')">➕ Nueva Venta</a>
+                        <a onclick="fetchFragment('/VentaController?op=listar')">📋 Listar Ventas</a>
+                    </div>
                     <a id="menuClientes"><i class="fas fa-user"></i> Clientes</a>
                     <div id="submenuClientes" class="submenu">
                         <a onclick="fetchFragment('/ClienteController?op=nuevo')">➕ Nuevo</a>
@@ -195,22 +199,18 @@
                         </a>
                         <% } %>
 
-                            <a id="menuVentas"><i class="fas fa-shopping-cart"></i> Ventas</a>
-                            <div id="submenuVentas" class="submenu">
-                                <a onclick="fetchFragment('/VentaController?op=nuevo')">➕ Nueva Venta</a>
-                                <a onclick="fetchFragment('/VentaController?op=listar')">📋 Listar Ventas</a>
-                            </div>
 
-                            <a onclick="fetchFragment('/ReporteController?op=listar')">
-                                <i class="fas fa-chart-bar"></i> Reportes
-                            </a>
+
 
                             <a onclick="fetchFragment('/CompraController?op=listar')">
                                 <i class="fas fa-shopping-bag"></i> Compras
                             </a>
 
-                            <a onclick="fetchFragment('/HistorialController?op=listar')">
+                            <a onclick="fetchFragment('/HistorialMedicoController?op=listar')">
                                 <i class="fas fa-history"></i> Historial
+                            </a>
+                            <a onclick="fetchFragment('/ReporteController?op=listar')">
+                                <i class="fas fa-chart-bar"></i> Reportes
                             </a>
 
                             <a href="<%=contextPath%>/LoginController?accion=logout">
@@ -234,25 +234,79 @@
             <div class="content">
                 <div id="contenidoPrincipal" class="fade-enter">
                     <div class="row g-4">
+                        <!-- Clientes -->
                         <div class="col-md-3">
                             <div class="dashboard-card" onclick="fetchFragment('/ClienteController?op=listar')">
                                 <i class="fas fa-users text-danger"></i>
                                 <h6>Clientes</h6>
                             </div>
                         </div>
+                        <!-- Mascotas -->
                         <div class="col-md-3">
                             <div class="dashboard-card" onclick="fetchFragment('/MascotaController?op=listar')">
                                 <i class="fas fa-dog text-success"></i>
                                 <h6>Mascotas</h6>
                             </div>
                         </div>
+                        <!-- Productos -->
                         <div class="col-md-3">
                             <div class="dashboard-card" onclick="fetchFragment('/ProductoController?op=listar')">
                                 <i class="fas fa-box-open text-primary"></i>
                                 <h6>Productos</h6>
                             </div>
                         </div>
+                        <!-- Citas -->
+                        <div class="col-md-3">
+                            <div class="dashboard-card" onclick="fetchFragment('/CitaController?op=listar')">
+                                <i class="fas fa-calendar-check text-info"></i>
+                                <h6>Citas</h6>
+                            </div>
+                        </div>
+                        <!-- Ventas -->
+                        <div class="col-md-3">
+                            <div class="dashboard-card" onclick="fetchFragment('/VentaController?op=listar')">
+                                <i class="fas fa-shopping-cart text-warning"></i>
+                                <h6>Ventas</h6>
+                            </div>
+                        </div>
+                        <!-- Compras -->
+                        <div class="col-md-3">
+                            <div class="dashboard-card" onclick="fetchFragment('/CompraController?op=listar')">
+                                <i class="fas fa-shopping-bag text-secondary"></i>
+                                <h6>Compras</h6>
+                            </div>
+                        </div>
+                        <!-- Proveedor -->
+                        <div class="col-md-3">
+                            <div class="dashboard-card" onclick="fetchFragment('/ProveedorController?op=listar')">
+                                <i class="fas fa-truck text-dark"></i>
+                                <h6>Proveedor</h6>
+                            </div>
+                        </div>
+                        <!-- Categoria -->
+                        <div class="col-md-3">
+                            <div class="dashboard-card" onclick="fetchFragment('/CategoriaController?op=listar')">
+                                <i class="fas fa-tags text-success"></i>
+                                <h6>Categoría</h6>
+                            </div>
+                        </div>
+                        <!-- Historial -->
+                        <div class="col-md-3">
+                            <div class="dashboard-card" onclick="fetchFragment('/HistorialMedicoController?op=listar')">
+                                <i class="fas fa-notes-medical text-danger"></i>
+                                <h6>Historial</h6>
+                            </div>
+                        </div>
+
                         <% if("ADMIN".equals(rol)){ %>
+                            <!-- Solo ADMIN: Usuarios -->
+                            <div class="col-md-3">
+                                <div class="dashboard-card" onclick="fetchFragment('/UsuarioController?op=listar')">
+                                    <i class="fas fa-user-shield text-dark"></i>
+                                    <h6>Usuarios</h6>
+                                </div>
+                            </div>
+                            <!-- Solo ADMIN: Servicios -->
                             <div class="col-md-3">
                                 <div class="dashboard-card" onclick="fetchFragment('/ServicioController?op=listar')">
                                     <i class="fas fa-bath text-warning"></i>
@@ -260,6 +314,13 @@
                                 </div>
                             </div>
                             <% } %>
+                                <!-- Reportes -->
+                                <div class="col-md-3">
+                                    <div class="dashboard-card" onclick="fetchFragment('/ReporteController?op=listar')">
+                                        <i class="fas fa-chart-bar text-info"></i>
+                                        <h6>Reportes</h6>
+                                    </div>
+                                </div>
                     </div>
                 </div>
             </div>

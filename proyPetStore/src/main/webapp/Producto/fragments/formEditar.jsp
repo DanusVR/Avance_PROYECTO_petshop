@@ -104,8 +104,7 @@
                                             <div class="mb-3">
                                                 <label class="form-label">Fecha de Registro</label>
                                                 <input type="date" name="fecha_registro" id="fecha_registro"
-                                                    value="<%=producto.getFecha_registro() != null ? new java.text.SimpleDateFormat("
-                                                    yyyy-MM-dd").format(producto.getFecha_registro()) : "" %>"
+                                                    value="<%=producto.getFecha_registro() != null ? new java.text.SimpleDateFormat("yyyy-MM-dd").format(producto.getFecha_registro()) : "" %>"
                                                 class="form-control" required>
                                             </div>
 

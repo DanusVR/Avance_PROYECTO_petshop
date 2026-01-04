@@ -71,6 +71,7 @@ public class HistorialMedicoController extends HttpServlet {
     private void listar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             response.setContentType("text/html; charset=UTF-8");
+            System.out.println("Entrando a listar Historial...");
             request.setAttribute("listaHistorial", model.listar());
             request.getRequestDispatcher("/Historial/listarHistorial.jsp").forward(request, response);
         } catch (Exception e) {
@@ -80,7 +81,7 @@ public class HistorialMedicoController extends HttpServlet {
 
     private void cargarFormularioNuevo(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    	try {
+        try {
             response.setContentType("text/html; charset=UTF-8");
 
             // Cargar todas las mascotas para el combo
@@ -130,7 +131,7 @@ public class HistorialMedicoController extends HttpServlet {
             throws ServletException, IOException {
         try {
             Historial_Medico hm = new Historial_Medico();
-                 // me falta arreglar C: 
+            // me falta arreglar C:
             // para vincular automáticamente la descripción y mascota
             String paramIdServicio = request.getParameter("id_servicio");
             if (paramIdServicio != null) {
@@ -178,7 +179,8 @@ public class HistorialMedicoController extends HttpServlet {
             if (esAjax) {
                 enviarJSON(response, resultado > 0, resultado > 0 ? "Historial modificado" : "Error al modificar");
             } else {
-                request.getSession().setAttribute("mensaje", resultado > 0 ? "Modificación exitosa" : "Modificación fallida");
+                request.getSession().setAttribute("mensaje",
+                        resultado > 0 ? "Modificación exitosa" : "Modificación fallida");
                 listar(request, response);
             }
         } catch (Exception e) {
@@ -191,7 +193,8 @@ public class HistorialMedicoController extends HttpServlet {
         }
     }
 
-    private void eliminar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void eliminar(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         try {
             int idHistorial = Integer.parseInt(request.getParameter("id_historial"));
             model.eliminar(idHistorial);
