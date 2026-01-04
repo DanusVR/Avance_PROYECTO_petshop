@@ -36,10 +36,10 @@
                                                     onclick="modalHistorial.abrir('nuevo')">
                                                     ➕ Nuevo Historial
                                                 </button>
-                                                <a href="<%= url %>MascotaController?op=listar"
-                                                    class="btn btn-secondary">
+                                                <button class="btn btn-secondary"
+                                                    onclick="fetchFragment('/MascotaController?op=listar')">
                                                     ← Volver a Mascotas
-                                                </a>
+                                                </button>
                                             </div>
                                         </div>
 

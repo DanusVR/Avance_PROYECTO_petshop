@@ -68,8 +68,8 @@
 													<button type="submit" class="btn btn-success w-50">
 														<%=esEditar ? "💾 Actualizar" : "💾 Guardar" %>
 													</button>
-													<a href="<%=url%>HistorialMedicoController?op=listar"
-														class="btn btn-secondary w-50"> ← Cancelar </a>
+													<button type="button" class="btn btn-secondary w-50"
+														data-bs-dismiss="modal">Cancelar</button>
 												</div>
 									</form>
 

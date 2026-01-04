@@ -181,9 +181,13 @@
                         <a onclick="fetchFragment('/MascotaController?op=listar')">📋 Listar</a>
                     </div>
 
-                    <a onclick="fetchFragment('/ProductoController?op=listar')">
-                        <i class="fas fa-box"></i> Productos
-                    </a>
+                    <a id="menuProductos"><i class="fas fa-box"></i> Productos</a>
+                    <div id="submenuProductos" class="submenu">
+                        <a onclick="fetchFragment('/ProductoController?op=nuevo')">➕ Nuevo Producto</a>
+                        <a onclick="fetchFragment('/ProductoController?op=listar')">📋 Listar Productos</a>
+                        <a onclick="fetchFragment('/CategoriaController?op=nuevo')">➕ Nueva Categoría</a>
+                        <a onclick="fetchFragment('/CategoriaController?op=listar')">📋 Listar Categorías</a>
+                    </div>
 
                     <a onclick="fetchFragment('/ServicioController?op=listar')">
                         <i class="fas fa-bath"></i> Servicios
@@ -199,12 +203,12 @@
                         </a>
                         <% } %>
 
+                            <a id="menuCompras"><i class="fas fa-bag"></i> Compras</a>
+                            <div id="submenuProductos" class="submenu">
+                                <a onclick="fetchFragment('/CompraController?op=listar?op=nuevo')">➕ Nuevo Ventas</a>
+                                <a onclick="fetchFragment('/CompraController?op=listar')">📋 Listar Ventas</a>
 
-
-
-                            <a onclick="fetchFragment('/CompraController?op=listar')">
-                                <i class="fas fa-shopping-bag"></i> Compras
-                            </a>
+                            </div>
 
                             <a onclick="fetchFragment('/HistorialMedicoController?op=listar')">
                                 <i class="fas fa-history"></i> Historial
@@ -337,6 +341,7 @@
                 document.getElementById("menuClientes").onclick = () => toggle("submenuClientes");
                 document.getElementById("menuMascotas").onclick = () => toggle("submenuMascotas");
                 document.getElementById("menuVentas").onclick = () => toggle("submenuVentas");
+                document.getElementById("menuProductos").onclick = () => toggle("submenuProductos");
 
                 function fetchFragment(url) {
                     const cont = document.getElementById("contenidoPrincipal");
@@ -542,9 +547,143 @@
                     if (!estado) { alert("Debe seleccionar un estado."); return false; }
                     return true;
                 }
+
+                // --- MODAL CATEGORIA ---
+                const modalCategoria = {
+                    abrir: function (op, id = null) {
+                        let url = 'CategoriaController?op=' + op;
+                        if (id) url += '&id=' + id;
+                        fetch(contextPath + '/' + url).then(r => r.text()).then(html => {
+                            document.querySelector('#modalCategoria .modal-body').innerHTML = html;
+                            new bootstrap.Modal(document.getElementById('modalCategoria')).show();
+                        }).catch(e => console.error(e));
+                    }
+                };
+
+                function validarCategoria() {
+                    let nombreCat = document.getElementById("nombreCat").value.trim();
+                    if (nombreCat === "") {
+                        alert("El nombre de la categoría es obligatorio");
+                        return false;
+                    }
+                    return true;
+                }
+
+                // --- MODAL COMPRA ---
+                const modalCompra = {
+                    abrir: function (tipo, id = 0) {
+                        let url = '';
+                        if (tipo === 'nuevo') {
+                            url = 'CompraController?op=nuevo';
+                        } else if (tipo === 'ver') {
+                            url = 'CompraController?op=ver&id=' + id;
+                        }
+
+                        fetch(contextPath + '/' + url)
+                            .then(res => res.text())
+                            .then(html => {
+                                const modalBody = document.querySelector('#modalCompra .modal-body');
+                                modalBody.innerHTML = html;
+
+                                // Execute scripts
+                                Array.from(modalBody.querySelectorAll("script")).forEach(oldScript => {
+                                    const newScript = document.createElement("script");
+                                    Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+                                    newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+                                    oldScript.parentNode.replaceChild(newScript, oldScript);
+                                });
+
+                                new bootstrap.Modal(document.getElementById('modalCompra')).show();
+                            })
+                            .catch(err => console.error("Error al abrir modal compra:", err));
+                    }
+                };
+
+                // --- LÓGICA FORMULARIO COMPRA ---
+                function agregarFila() {
+                    const tbody = document.querySelector('#tablaDetalle tbody');
+                    if (!tbody) return;
+                    const fila = document.createElement('tr');
+
+                    let options = '<option value="">-- Producto --</option>';
+                    if (window.listaProductos) {
+                        window.listaProductos.forEach(p => {
+                            options += `<option value="${p.id}" data-precio="${p.precio}">${p.nombre}</option>`;
+                        });
+                    }
+
+                    fila.innerHTML = `
+                        <td>
+                            <select name="id_producto" class="form-select producto-select" required onchange="actualizarPrecio(this)">
+                                ${options}
+                            </select>
+                        </td>
+                        <td><input type="number" name="cantidad" class="form-control cantidad" value="1" min="1" required oninput="actualizarTotales()"></td>
+                        <td><input type="number" name="precio_unitario" class="form-control precio" value="0.00" min="0" step="0.01" required oninput="actualizarTotales()"></td>
+                        <td class="text-end subtotal">0.00</td>
+                        <td class="text-center">
+                            <button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(fila);
+                    actualizarTotales();
+                }
+
+                function actualizarPrecio(select) {
+                    const precio = select.options[select.selectedIndex].getAttribute('data-precio');
+                    const row = select.closest('tr');
+                    const inputPrecio = row.querySelector('.precio');
+                    if (precio) {
+                        inputPrecio.value = parseFloat(precio).toFixed(2);
+                    } else {
+                        inputPrecio.value = "0.00";
+                    }
+                    actualizarTotales();
+                }
+
+
+                function eliminarFila(btn) {
+                    btn.closest('tr').remove();
+                    actualizarTotales();
+                }
+
+                function actualizarTotales() {
+                    let total = 0;
+                    document.querySelectorAll('#tablaDetalle tbody tr').forEach(fila => {
+                        const cantidad = parseFloat(fila.querySelector('.cantidad').value) || 0;
+                        const precio = parseFloat(fila.querySelector('.precio').value) || 0;
+                        const subtotal = cantidad * precio;
+                        fila.querySelector('.subtotal').textContent = subtotal.toFixed(2);
+                        total += subtotal;
+                    });
+                    const totalEl = document.getElementById('totalCompra');
+                    if (totalEl) totalEl.textContent = total.toFixed(2);
+
+                    const inputTotal = document.getElementById('inputTotal');
+                    if (inputTotal) inputTotal.value = total.toFixed(2);
+                }
+
+                function validarCompra() {
+                    const proveedor = document.getElementById('id_proveedor').value;
+                    if (proveedor === '') { alert('Seleccione un proveedor'); return false; }
+                    if (document.querySelectorAll('#tablaDetalle tbody tr').length === 0) {
+                        alert('Agregue al menos un producto'); return false;
+                    }
+                    actualizarTotales();
+
+                    const form = document.getElementById('formCompra');
+                    let totalInput = document.createElement('input');
+                    totalInput.type = 'hidden';
+                    totalInput.name = 'total';
+                    totalInput.value = document.getElementById('totalCompra').textContent;
+                    form.appendChild(totalInput);
+
+                    return true;
+                }
             </script>
 
         </body>
 
         </html>
-        ```

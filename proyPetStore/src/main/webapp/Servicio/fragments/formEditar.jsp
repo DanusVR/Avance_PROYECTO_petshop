@@ -102,8 +102,8 @@
                                         <button type="submit" class="btn btn-primary w-100 mb-2">Guardar
                                             Cambios</button>
 
-                                        <a href="<%=url%>ServicioController?op=listar"
-                                            class="btn btn-secondary w-100">Cancelar</a>
+                                        <button type="button" class="btn btn-secondary w-100"
+                                            data-bs-dismiss="modal">Cancelar</button>
 
                                     </form>
 

@@ -28,7 +28,7 @@
             <button class="btn btn-success me-2" onclick="modalHistorial.abrir('nuevo', <%= idMascota %>)">
                 ➕ Agregar Historial
             </button>
-            <a href="<%= url %>MascotaController?op=listar" class="btn btn-secondary">← Volver a Mascotas</a>
+          
         </div>
     </div>
 

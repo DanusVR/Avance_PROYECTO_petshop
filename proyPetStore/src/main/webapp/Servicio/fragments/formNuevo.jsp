@@ -80,10 +80,10 @@
                                 </form>
 
                                 <br>
-                                <a href="<%=request.getContextPath()%>/ServicioController?op=listar"
-                                    class="btn btn-secondary w-100">
-                                    Volver a la Lista
-                                </a>
+                                <br>
+                                <button type="button" class="btn btn-secondary w-100" data-bs-dismiss="modal">
+                                    Cancelar
+                                </button>
 
                             </div>
                         </div>
