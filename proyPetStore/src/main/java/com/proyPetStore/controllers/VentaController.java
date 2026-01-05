@@ -149,7 +149,7 @@ public class VentaController extends HttpServlet {
 
 			Venta venta = new Venta();
 			venta.setId_cliente(Integer.parseInt(idClienteStr));
-			venta.setIdusuario(1); // Usuario fijo por ahora
+			venta.setIdusuario(1); 
 			venta.setTipo_pago(request.getParameter("tipo_pago"));
 
 			String montoStr = request.getParameter("monto_pagado");

@@ -32,10 +32,10 @@
                                         <div class="d-flex justify-content-between align-items-center mb-4">
                                             <h2 class="text-primary">🐾 Historial Médico de Todas las Mascotas</h2>
                                             <div>
-                                                <button class="btn btn-success me-2"
+                                               <!--   <button class="btn btn-success me-2"
                                                     onclick="modalHistorial.abrir('nuevo')">
                                                     ➕ Nuevo Historial
-                                                </button>
+                                                </button>-->
                                                 <button class="btn btn-secondary"
                                                     onclick="fetchFragment('/MascotaController?op=listar')">
                                                     ← Volver a Mascotas
@@ -74,8 +74,7 @@
                                                                     </td>
                                                                     <td>
                                                                         <%= h.getDescripcion() %>
-                                                                            <%-- Badge si fue generado por servicio
-                                                                                automáticamente --%>
+                                                                           
                                                                                 <% if(h.getDescripcion() !=null &&
                                                                                     h.getDescripcion().startsWith("Servicio:"))
                                                                                     { %>

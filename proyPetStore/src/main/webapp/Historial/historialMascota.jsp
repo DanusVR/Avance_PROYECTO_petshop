@@ -29,10 +29,10 @@
                                     <h2 class="text-primary">📋 Historial Médico de <%= nombreMascota %>
                                     </h2>
                                     <div>
-                                        <button class="btn btn-success me-2"
-                                            onclick="modalHistorial.abrir('nuevo', <%= idMascota %>)">
+                                       <!--   <button class="btn btn-success me-2"
+                                            onclick="modalHistorial.abrir('nuevo', <//%= idMascota %>)">
                                             ➕ Agregar Historial
-                                        </button>
+                                        </button>-->
 
                                     </div>
                                 </div>
