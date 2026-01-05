@@ -207,9 +207,9 @@
                             <a id="menuCompras">
                                 <i class="fas fa-shopping-bag"></i> Compras</a>
                             <div id="submenuCompras" class="submenu">
-                                <!-- Nueva Compra: Opens Modal -->
+                              
                                 <a onclick="fetchFragment('/CompraController?op=nuevo')">➕ Nueva Compra</a>
-                                <!-- Listar Compras: Loads Fragment -->
+                               
                                 <a onclick="fetchFragment('/CompraController?op=listar')">📋 Listar Compras</a>
                             </div>
 
@@ -307,14 +307,14 @@
                         </div>
 
                         <% if("ADMIN".equals(rol)){ %>
-                            <!-- Solo ADMIN: Usuarios -->
+                          
                             <div class="col-md-3">
                                 <div class="dashboard-card" onclick="fetchFragment('/UsuarioController?op=listar')">
                                     <i class="fas fa-user-shield text-dark"></i>
                                     <h6>Usuarios</h6>
                                 </div>
                             </div>
-                            <!-- Solo ADMIN: Servicios -->
+                          
                             <div class="col-md-3">
                                 <div class="dashboard-card" onclick="fetchFragment('/ServicioController?op=listar')">
                                     <i class="fas fa-bath text-warning"></i>
@@ -370,7 +370,7 @@
                         .catch(() => { cont.innerHTML = "<div class='alert alert-danger'>Error</div>"; });
                 }
 
-                // Global Scope for Client Modal
+               
                 const modalCliente = {
                     abrir: function (op, id = null) {
                         let url = 'ClienteController?op=' + op;
@@ -389,7 +389,6 @@
                     }
                 };
 
-                // Global Validation Functions
                 function validarCliente() {
                     let nombre = document.getElementById("nombreC").value.trim();
                     let apellido = document.getElementById("apellido").value.trim();
@@ -471,10 +470,10 @@
                        
                         let url = '';
                         if (typeof arg1 === 'number') {
-                            // Called via modalHistorial.abrir(idMascota) from Mascota list
+                            
                             url = 'HistorialMedicoController?op=listarPorMascota&id_mascota=' + arg1;
                         } else {
-                            // Called via 'nuevo'/'editar' from Historial list
+                           
                             let op = arg1;
                             let id = arg2;
                             url = 'HistorialMedicoController?op=' + op;
@@ -621,7 +620,7 @@
 
                     let options = '<option value="">-- Producto --</option>';
 
-                    // Intentar obtener los productos del input oculto
+                    
                     const inputData = document.getElementById('dataProductos');
                     if (inputData && inputData.value) {
                         try {
@@ -633,7 +632,7 @@
                             console.error("Error parsing productos:", e);
                         }
                     } else if (window.listaProductos) {
-                        // Fallback por si acaso
+                      
                         window.listaProductos.forEach(p => {
                             options += `<option value="${p.id}" data-precio="${p.precio}">${p.nombre}</option>`;
                         });
@@ -802,12 +801,11 @@
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {
-                                // Close modal
+                               
                                 const modalEl = document.getElementById(modalId);
                                 const modal = bootstrap.Modal.getInstance(modalEl);
                                 if (modal) modal.hide();
 
-                                // Refresh list
                                 fetchFragment(refreshUrl);
 
                            

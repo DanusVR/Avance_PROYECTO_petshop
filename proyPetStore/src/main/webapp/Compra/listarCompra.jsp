@@ -66,7 +66,7 @@
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <!-- Se carga dinamicamente formNuevoCompra.jsp o formVerCompra.jsp -->
+                     
                     </div>
                 </div>
             </div>

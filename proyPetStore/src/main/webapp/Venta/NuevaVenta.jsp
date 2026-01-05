@@ -59,7 +59,7 @@
 							</div>
 							<% } %>
 
-								<!-- FORM: Agregar Ítem -->
+								
 								<form action="VentaController" method="post" onsubmit="submitVentaForm(event)">
 									<input type="hidden" name="op" value="agregar">
 
@@ -251,23 +251,20 @@
 							.then(html => {
 								const cont = document.getElementById("contenidoPrincipal");
 								cont.innerHTML = html;
-								// Re-execute scripts logic if needed, or simply calling functionality
-								// Since the response is the full JSP fragment, scripts inside it need to run 
-								// for showing/hiding fields again.
-								// Extract and run scripts
+								
 								const scripts = cont.querySelectorAll("script");
 								scripts.forEach(oldScript => {
 									const newScript = document.createElement("script");
 									newScript.text = oldScript.innerHTML;
 									oldScript.parentNode.replaceChild(newScript, oldScript);
 								});
-								// Trigger onload manually
+								
 								mostrarCampos();
 							})
 							.catch(err => console.error("Error:", err));
 					}
 
-					// Initial call
+				
 					mostrarCampos();
 				</script>
 

@@ -3,15 +3,14 @@
         import="java.util.List, java.util.ArrayList, com.proyPetStore.beans.Proveedor, com.proyPetStore.beans.Producto"
         %>
 
-        <% //==================Preparar datos==================String url=request.getContextPath() + "/" ;
+        <% 
+          String url=request.getContextPath() + "/" ;
             List<Proveedor> listaProveedores = (List<Proveedor>) request.getAttribute("listarProveedor");
                 if (listaProveedores == null) listaProveedores = new ArrayList<>();
 
                     // Lista de productos
                     List<Producto> listaProductos = (List<Producto>) request.getAttribute("listarProductos");
                             if (listaProductos == null) listaProductos = new ArrayList<>();
-
-                                // Construir JSON de productos para usar en JS
                                 StringBuilder sb = new StringBuilder("[");
                                 for (int i = 0; i < listaProductos.size(); i++) { Producto p=listaProductos.get(i);
                                     String nombreClean=p.getNombre() !=null ? p.getNombre().replace("\"", ""
@@ -69,7 +68,7 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                <!-- Filas dinámicas se agregarán con JS -->
+                                                               
                                                             </tbody>
                                                         </table>
 
@@ -100,15 +99,12 @@
                                         </div>
                                     </div>
 
-                                    <!-- ================== Scripts y estilos ================== -->
-                                    <!-- Bootstrap Icons -->
+                                    <!-- ================== Scripts y estilos ================== -->                                  
                                     <link rel="stylesheet"
                                         href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
-                                    <!-- Aquí puedes agregar tus scripts para agregar filas dinámicas, calcular subtotal y total -->
-                                    <script>
-                                        // Usar una funcion autoejecutable o scope local no funciona bien con la reinyeccion de scripts de inicio.jsp
-                                        // Mejor definimos funciones en window o usamos var, y leemos los datos dentro de las funciones
+                                
+                                    <script>                                       
 
                                         function obtenerProductosData() {
                                             try {
@@ -123,8 +119,6 @@
                                             const productosLista = obtenerProductosData();
                                             const tbody = document.querySelector('#tablaDetalle tbody');
                                             const row = document.createElement('tr');
-
-                                            // Usar concatenación para evitar conflicto con JSP EL
                                             const options = productosLista.map(p => '<option value="' + p.id + '" data-precio="' + p.precio + '">' + p.nombre + '</option>').join('');
 
                                             row.innerHTML = '<td>' +
@@ -166,13 +160,11 @@
                                         }
 
                                         function handleCompraSubmit(event) {
-                                            event.preventDefault(); // Evitar submit tradicional
-
+                                            event.preventDefault(); 
                                             if (!validarCompra()) return;
 
                                             const form = document.getElementById('formCompra');
-                                            // Convertir FormData a URLSearchParams para enviar x-www-form-urlencoded
-                                            // Esto evita problemas con @MultipartConfig no presente en el servlet
+                                            
                                             const formData = new FormData(form);
                                             const params = new URLSearchParams();
 
@@ -180,12 +172,12 @@
                                                 params.append(pair[0], pair[1]);
                                             }
 
-                                            // Agregar op=insertarAjax
+                                          
                                             params.set('op', 'insertarAjax');
 
                                             fetch(form.action, {
                                                 method: 'POST',
-                                                body: params // Envia como application/x-www-form-urlencoded
+                                                body: params 
                                             })
                                                 .then(response => {
                                                     const contentType = response.headers.get("content-type");
@@ -231,7 +223,7 @@
                                                 return false;
                                             }
 
-                                            // Validar que todos los productos estén seleccionados
+                                            // Validar  todos los productos estén seleccionados
                                             for (let tr of filas) {
                                                 const producto = tr.querySelector('select[name="id_producto"]').value;
                                                 if (!producto) {
@@ -239,7 +231,7 @@
                                                     return false;
                                                 }
                                             }
-                                            // Ensure hidden total is updated
+                                           
                                             calcularTotal();
                                             return true;
                                         }
