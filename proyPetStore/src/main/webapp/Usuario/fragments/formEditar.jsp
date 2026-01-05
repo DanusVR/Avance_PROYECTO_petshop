@@ -4,8 +4,8 @@
         <% String url=request.getContextPath() + "/" ; Usuario usuario=(Usuario) request.getAttribute("usuario");
             if(usuario==null) { usuario=new Usuario(); } %>
 
-            <form action="<%=url%>UsuariosController" method="POST" id="formUsuario" class="needs-validation" novalidate
-                onsubmit="return submitFormAjax(event, 'modalUsuario', '/UsuariosController?op=listar', 'validarUsuario')">
+            <form action="<%=url%>UsuarioController" method="POST" id="formUsuario" class="needs-validation" novalidate
+                onsubmit="return submitFormAjax(event, 'modalUsuario', '/UsuarioController?op=listar', 'validarUsuario')">
                 <input type="hidden" name="op" value="modificar">
                 <input type="hidden" name="id" value="<%=usuario.getIdUsuario()%>">
 

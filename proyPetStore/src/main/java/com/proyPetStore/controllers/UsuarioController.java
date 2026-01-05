@@ -12,71 +12,71 @@ import java.util.logging.Logger;
 
 import com.proyPetStore.beans.Usuario;
 import com.proyPetStore.model.UsuarioModel;
-
+import com.proyPetStore.util.Util;
 
 /**
  * Servlet implementation class UsuarioController
  */
 @WebServlet("/UsuarioController")
 public class UsuarioController extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-    
-	UsuarioModel modelo =  new UsuarioModel();
-	
-	public UsuarioController() {
+    private static final long serialVersionUID = 1L;
+
+    UsuarioModel modelo = new UsuarioModel();
+
+    public UsuarioController() {
         super();
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         String operacion = request.getParameter("op");
 
         if (operacion == null) {
             listar(request, response);
             return;
         }
-        
+
         boolean esAjax = operacion.endsWith("Ajax");
 
         switch (operacion) {
-        case "listar":
-            listar(request, response);
-            break;
+            case "listar":
+                listar(request, response);
+                break;
 
-        case "nuevo":
-            cargarFormularioNuevo(request, response);
-            break;
+            case "nuevo":
+                cargarFormularioNuevo(request, response);
+                break;
 
-        case "editar":
-            cargarFormularioEditar(request, response);
-            break;
+            case "editar":
+                cargarFormularioEditar(request, response);
+                break;
 
-        case "insertarAjax":
-        case "insertar":
-            insertar(request, response, esAjax);
-            break;
+            case "insertarAjax":
+            case "insertar":
+                insertar(request, response, esAjax);
+                break;
 
-        case "modificarAjax":
-        case "modificar":
-            modificar(request, response, esAjax);
-            break;
-            
-        case "cambiarPassword":
-            cargarFormularioPassword(request, response);
-            break;
-            
-        case "cambiarPasswordAjax":
-            cambiarPassword(request, response);
-            break;
+            case "modificarAjax":
+            case "modificar":
+                modificar(request, response, esAjax);
+                break;
 
-        case "eliminar":
-            eliminar(request, response);
-            break;
+            case "cambiarPassword":
+                cargarFormularioPassword(request, response);
+                break;
 
-        default:
-            listar(request, response);
-            break;
+            case "cambiarPasswordAjax":
+                cambiarPassword(request, response);
+                break;
+
+            case "eliminar":
+                eliminar(request, response);
+                break;
+
+            default:
+                listar(request, response);
+                break;
         }
     }
 
@@ -119,7 +119,7 @@ public class UsuarioController extends HttpServlet {
             Logger.getLogger(UsuarioController.class.getName()).log(Level.SEVERE, null, e);
         }
     }
-    
+
     private void cargarFormularioPassword(HttpServletRequest request, HttpServletResponse response) {
         try {
             response.setContentType("text/html; charset=UTF-8");
@@ -141,7 +141,8 @@ public class UsuarioController extends HttpServlet {
         try {
             Usuario usuario = new Usuario();
             usuario.setNombreUsuario(request.getParameter("nombreUsuario"));
-            usuario.setPassword(request.getParameter("password"));
+            String password = request.getParameter("password");
+            usuario.setPassword(Util.encriptarMD5(password));
             usuario.setNombreCompleto(request.getParameter("nombreCompleto"));
             usuario.setEmail(request.getParameter("email"));
             usuario.setRol(request.getParameter("rol"));
@@ -215,17 +216,18 @@ public class UsuarioController extends HttpServlet {
             }
         }
     }
-    
+
     private void cambiarPassword(HttpServletRequest request, HttpServletResponse response) {
         try {
             int idUsuario = Integer.parseInt(request.getParameter("id"));
             String passwordNueva = request.getParameter("passwordNueva");
+            String passwordEncriptada = Util.encriptarMD5(passwordNueva);
 
-            int resultado = modelo.cambiarPassword(idUsuario, passwordNueva);
-            
+            int resultado = modelo.cambiarPassword(idUsuario, passwordEncriptada);
+
             enviarJSON(response, resultado > 0,
                     resultado > 0 ? "Contraseña cambiada exitosamente" : "Error al cambiar contraseña");
-            
+
         } catch (Exception e) {
             e.printStackTrace();
             enviarJSON(response, false, "Error: " + e.getMessage());

@@ -732,6 +732,44 @@
                     return true;
                 }
 
+                // --- MODAL USUARIO ---
+                const modalUsuario = {
+                    abrir: function (op, id = null) {
+                        let url = 'UsuarioController?op=' + op + '&modal=true';
+                        if (id) url += '&id=' + id;
+                        fetch(contextPath + '/' + url).then(r => r.text()).then(html => {
+                            document.querySelector('#modalUsuario .modal-body').innerHTML = html;
+                            new bootstrap.Modal(document.getElementById('modalUsuario')).show();
+                            // Initialize password toggle if present
+                            const toggleBtn = document.getElementById('togglePassword');
+                            if (toggleBtn) {
+                                toggleBtn.addEventListener('click', function () {
+                                    const input = document.getElementById('passwordNueva');
+                                    const icon = this.querySelector('i');
+                                    if (input.type === 'password') {
+                                        input.type = 'text';
+                                        icon.classList.remove('fa-eye');
+                                        icon.classList.add('fa-eye-slash');
+                                    } else {
+                                        input.type = 'password';
+                                        icon.classList.remove('fa-eye-slash');
+                                        icon.classList.add('fa-eye');
+                                    }
+                                });
+                            }
+                        }).catch(e => console.error(e));
+                    }
+                };
+
+                function validarPassword() {
+                    const password = document.getElementById('passwordNueva').value;
+                    const confirmar = document.getElementById('passwordConfirmar').value;
+
+                    if (password.length < 6) { alert('La contraseña debe tener al menos 6 caracteres'); return false; }
+                    if (password !== confirmar) { alert('Las contraseñas no coinciden'); return false; }
+                    return true;
+                }
+
                 /**
                  * Generic AJAX Form Submission Handler
                  * @param {Event} event - The submit event

@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
     <% String url=request.getContextPath() + "/" ; %>
 
-        <form action="<%=url%>UsuariosController" method="POST" id="formUsuario" class="needs-validation" novalidate
-            onsubmit="return submitFormAjax(event, 'modalUsuario', '/UsuariosController?op=listar', 'validarUsuario')">
+        <form action="<%=url%>UsuarioController" method="POST" id="formUsuario" class="needs-validation" novalidate
+            onsubmit="return submitFormAjax(event, 'modalUsuario', '/UsuarioController?op=listar', 'validarUsuario')">
             <input type="hidden" name="op" value="insertar">
 
             <div class="row">
