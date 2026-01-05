@@ -164,7 +164,7 @@
                 <div class="logo"><i class="fas fa-paw"></i> PETSHOP</div>
                 <div class="menu">
                     <a class="active" href='inicio.jsp'><i class="fas fa-chart-line"></i> Dashboard</a>
-                    
+
                     <a id="menuVentas"><i class="fas fa-shopping-cart"></i> Ventas</a>
                     <div id="submenuVentas" class="submenu">
                         <a onclick="fetchFragment('/VentaController?op=nuevo')">➕ Nueva Venta</a>
@@ -349,6 +349,7 @@
                 document.getElementById("menuCompras").onclick = () => toggle("submenuCompras");
 
                 function fetchFragment(url) {
+                    console.log("DEBUG: fetchFragment calling URL: " + contextPath + url);
                     const cont = document.getElementById("contenidoPrincipal");
                     cont.classList.remove("fade-enter");
                     fetch(contextPath + url)

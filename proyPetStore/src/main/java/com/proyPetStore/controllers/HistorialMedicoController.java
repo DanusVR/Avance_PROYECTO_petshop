@@ -28,12 +28,20 @@ public class HistorialMedicoController extends HttpServlet {
 
     HistorialMedicoModel model = new HistorialMedicoModel();
     MascotaModel modelMascota = new MascotaModel();
-    ServicioModel modelServicio = new ServicioModel(); 
+    ServicioModel modelServicio = new ServicioModel();
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        System.out.println("DEBUG: HistorialMedicoController initialized");
+    }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         String opc = request.getParameter("op");
+        System.out.println("DEBUG: HistorialMedicoController processRequest op=" + opc);
+
         if (opc == null) {
             listar(request, response);
             return;
@@ -131,7 +139,7 @@ public class HistorialMedicoController extends HttpServlet {
             throws ServletException, IOException {
         try {
             Historial_Medico hm = new Historial_Medico();
-            
+
             // para vincular automáticamente la descripción y mascota
             String paramIdServicio = request.getParameter("id_servicio");
             if (paramIdServicio != null) {

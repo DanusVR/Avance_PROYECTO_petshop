@@ -37,6 +37,7 @@ public class CompraController extends HttpServlet {
     @Override
     public void init() throws ServletException {
         try {
+            System.out.println("DEBUG: CompraController initialized");
             modelo = new CompraModel();
             proveedorModel = new ProveedorModel();
             productoModel = new ProductoModel();
@@ -51,6 +52,8 @@ public class CompraController extends HttpServlet {
             throws ServletException, IOException {
 
         String op = request.getParameter("op");
+        System.out.println("DEBUG: CompraController processRequest op=" + op);
+
         if (op == null) {
             listar(request, response);
             return;
@@ -137,7 +140,6 @@ public class CompraController extends HttpServlet {
 
             Compras compra = new Compras();
             compra.setId_proveedor(idProveedor);
-          
 
             // Obtener detalles desde el formulario (arrays)
             String[] productos = request.getParameterValues("id_producto");
@@ -159,16 +161,16 @@ public class CompraController extends HttpServlet {
                 det.setCantidad(cant);
                 det.setPrecio_unitario(prec);
 
-                // Calculamos subtotal 
+                // Calculamos subtotal
                 double sub = cant * prec;
-                det.setSubtotal(sub); 
+                det.setSubtotal(sub);
 
                 totalCalculado += sub;
 
                 compra.getDetalles().add(det);
             }
 
-            //  total calculado en el backend 
+            // total calculado en el backend
             compra.setTotal(totalCalculado);
 
             int resultado = modelo.insertarCompra(compra);

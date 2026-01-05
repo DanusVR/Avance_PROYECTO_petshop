@@ -14,7 +14,6 @@ import java.util.logging.Logger;
 import com.proyPetStore.beans.Cliente;
 import com.proyPetStore.model.ClienteModel;
 
-
 /**
  * Servlet implementation class ClienteController
  */
@@ -27,39 +26,49 @@ public class ClienteController extends HttpServlet {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+
+	@Override
+	public void init() throws ServletException {
+		super.init();
+		System.out.println("DEBUG: ClienteController initialized");
+	}
+
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		String opc = request.getParameter("op");
+		System.out.println("DEBUG: ClienteController processRequest op=" + opc);
+
 		if (opc == null) {
 			listar(request, response);
 			return;
 		}
-		 // Detectar si es AJAX
-        boolean esAjax = opc.endsWith("Ajax");
+		// Detectar si es AJAX
+		boolean esAjax = opc.endsWith("Ajax");
 		switch (opc) {
-		case "listar":
-			listar(request, response);
-			break;
-		case "nuevo":
-			cargarFormularioNuevo(request, response);
-			break;
-		case "editar":
-			cargarFormularioEditar(request, response);
-			break;
-		case "insertar":
-			insertar(request, response, false);
-			break;
-		case "modificar":
-			modificar(request, response, esAjax);
-			break;
-		case "eliminar":
-			eliminar(request, response);
-			break;
-		case "reporte":
-			break;
-		default: listar(request, response);
-			break;
+			case "listar":
+				listar(request, response);
+				break;
+			case "nuevo":
+				cargarFormularioNuevo(request, response);
+				break;
+			case "editar":
+				cargarFormularioEditar(request, response);
+				break;
+			case "insertar":
+				insertar(request, response, false);
+				break;
+			case "modificar":
+				modificar(request, response, esAjax);
+				break;
+			case "eliminar":
+				eliminar(request, response);
+				break;
+			case "reporte":
+				break;
+			default:
+				listar(request, response);
+				break;
 
 		}
 
@@ -75,31 +84,33 @@ public class ClienteController extends HttpServlet {
 		}
 
 	}
-	private void cargarFormularioNuevo(HttpServletRequest request, HttpServletResponse response) {
-	    try {
-	        response.setContentType("text/html; charset=UTF-8");
-	        
 
-	        String jsp = "/Cliente/fragments/formNuevo.jsp";
-	        request.getRequestDispatcher(jsp).forward(request, response);
-	    } catch (ServletException | IOException e) {
-	        Logger.getLogger(ClienteController.class.getName()).log(Level.SEVERE, null, e);
-	    }
-	}
-	private void cargarFormularioEditar(HttpServletRequest request, HttpServletResponse response) {
+	private void cargarFormularioNuevo(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			response.setContentType("text/html; charset=UTF-8");
-			String id = request.getParameter("id");
-			Cliente c = modelo.obtenerCliente(Integer.parseInt(id));			
-			
-	        request.setAttribute("cliente", c);
 
-			String jsp =  "/Cliente/fragments/formEditar.jsp";
+			String jsp = "/Cliente/fragments/formNuevo.jsp";
 			request.getRequestDispatcher(jsp).forward(request, response);
 		} catch (ServletException | IOException e) {
 			Logger.getLogger(ClienteController.class.getName()).log(Level.SEVERE, null, e);
 		}
 	}
+
+	private void cargarFormularioEditar(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			response.setContentType("text/html; charset=UTF-8");
+			String id = request.getParameter("id");
+			Cliente c = modelo.obtenerCliente(Integer.parseInt(id));
+
+			request.setAttribute("cliente", c);
+
+			String jsp = "/Cliente/fragments/formEditar.jsp";
+			request.getRequestDispatcher(jsp).forward(request, response);
+		} catch (ServletException | IOException e) {
+			Logger.getLogger(ClienteController.class.getName()).log(Level.SEVERE, null, e);
+		}
+	}
+
 	private void insertar(HttpServletRequest request, HttpServletResponse response, boolean esAjax) {
 
 		try {
@@ -145,44 +156,44 @@ public class ClienteController extends HttpServlet {
 	}
 
 	private void modificar(HttpServletRequest request, HttpServletResponse response, boolean esAjax) {
-	    try {
-	        Cliente c = new Cliente();
-	        c.setId_cliente(Integer.parseInt(request.getParameter("id_cliente")));
-	        c.setDni(request.getParameter("dni"));
-	        c.setNombreC(request.getParameter("nombreC"));
-	        c.setApellido(request.getParameter("apellido")); 
-	        c.setTelefono(request.getParameter("telefono"));
-	        c.setDireccion(request.getParameter("direccion"));
+		try {
+			Cliente c = new Cliente();
+			c.setId_cliente(Integer.parseInt(request.getParameter("id_cliente")));
+			c.setDni(request.getParameter("dni"));
+			c.setNombreC(request.getParameter("nombreC"));
+			c.setApellido(request.getParameter("apellido"));
+			c.setTelefono(request.getParameter("telefono"));
+			c.setDireccion(request.getParameter("direccion"));
 
-	        int resultado = modelo.modificarClientes(c);
+			int resultado = modelo.modificarClientes(c);
 
-	        if (esAjax) {
-	            enviarJSON(response, resultado > 0,
-	                    resultado > 0 ? "Cliente modificado exitosamente" : "Error al modificar");
-	        } else {
-	            response.setContentType("text/html; charset=UTF-8");
-	            if (resultado > 0) {
-	                request.getSession().setAttribute("mensaje", "Modificación exitosa");
-	            } else {
-	                request.getSession().setAttribute("mensaje", "Modificación fallida");
-	            }
-	            listar(request, response);
-	        }
-	    } catch (Exception e) {
-	        e.printStackTrace();
+			if (esAjax) {
+				enviarJSON(response, resultado > 0,
+						resultado > 0 ? "Cliente modificado exitosamente" : "Error al modificar");
+			} else {
+				response.setContentType("text/html; charset=UTF-8");
+				if (resultado > 0) {
+					request.getSession().setAttribute("mensaje", "Modificación exitosa");
+				} else {
+					request.getSession().setAttribute("mensaje", "Modificación fallida");
+				}
+				listar(request, response);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 
-	        if (esAjax) {
-	            enviarJSON(response, false, "Error: " + e.getMessage());
-	        } else {
-	            try {
-	                response.setContentType("text/html; charset=UTF-8");
-	                request.getSession().setAttribute("mensaje", "Error: " + e.getMessage());
-	                listar(request, response);
-	            } catch (Exception ex) {
-	                ex.printStackTrace();
-	            }
-	        }
-	    }
+			if (esAjax) {
+				enviarJSON(response, false, "Error: " + e.getMessage());
+			} else {
+				try {
+					response.setContentType("text/html; charset=UTF-8");
+					request.getSession().setAttribute("mensaje", "Error: " + e.getMessage());
+					listar(request, response);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		}
 	}
 
 	/**
@@ -203,19 +214,20 @@ public class ClienteController extends HttpServlet {
 		}
 		listar(request, response);
 	}
+
 	private void enviarJSON(HttpServletResponse response, boolean success, String mensaje) {
 		try {
-			
+
 			response.reset();
-			
+
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
 			response.setHeader("Cache-Control", "no-cache");
-			
+
 			String mensajeLimpio = mensaje.replace("\"", "'").replace("\n", " ").replace("\r", " ");
 
 			String json = "{\"success\":" + success + ",\"mensaje\":\"" + mensajeLimpio + "\"}";
-			
+
 			PrintWriter out = response.getWriter();
 			out.write(json);
 			out.flush();
