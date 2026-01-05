@@ -81,11 +81,10 @@
                                                     🩺 Historial
                                                 </button>
 
-                                                <a class="btn btn-danger btn-sm"
-                                                    href="<%=url%>MascotaController?op=eliminar&id=<%=mascota.getId_mascota()%>"
-                                                    onclick="return confirm('¿Seguro de eliminar esta mascota?')">
+                                                <button class="btn btn-danger btn-sm"
+                                                    onclick="eliminarRegistro('MascotaController?op=eliminar&id=<%=mascota.getId_mascota()%>')">
                                                     🗑 Eliminar
-                                                </a>
+                                                </button>
                                             </td>
                                         </tr>
                                         <% } } else { %>

@@ -1,10 +1,7 @@
 <%@page contentType="text/html; charset=UTF-8" language="java" %>
     <% String nombre=(String) session.getAttribute("nombreCompleto"); String rol=(String) session.getAttribute("rol");
-        if(nombre==null){ 
-        	response.sendRedirect(request.getContextPath() + "/LoginController" ); return;
-        	} String
-        currentUrl=request.getRequestURI(); 
-        	String contextPath=request.getContextPath(); %>
+        if(nombre==null){ response.sendRedirect(request.getContextPath() + "/LoginController" ); return; } String
+        currentUrl=request.getRequestURI(); String contextPath=request.getContextPath(); %>
 
         <!DOCTYPE html>
         <html lang="es">
@@ -788,6 +785,9 @@
                     }
 
                     const form = event.target;
+                    const submitBtn = form.querySelector('button[type="submit"]');
+                    if (submitBtn) submitBtn.disabled = true;
+
                     const formData = new FormData(form);
                     const params = new URLSearchParams();
 
@@ -828,9 +828,17 @@
                         .catch(error => {
                             console.error('Error:', error);
                             alert("Error de conexión al procesar la solicitud.");
+                        })
+                        .finally(() => {
+                            if (submitBtn) submitBtn.disabled = false;
                         });
 
                     return false;
+                }
+                function eliminarRegistro(url, confirmMsg = "¿Estás seguro de eliminar este registro?") {
+                    if (confirm(confirmMsg)) {
+                        fetchFragment(url);
+                    }
                 }
             </script>
 

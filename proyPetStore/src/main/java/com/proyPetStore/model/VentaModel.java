@@ -38,7 +38,7 @@ public class VentaModel extends Conexion {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			
+
 			this.cerrarConexion();
 		}
 
@@ -75,7 +75,7 @@ public class VentaModel extends Conexion {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			
+
 			this.cerrarConexion();
 		}
 	}
@@ -83,7 +83,7 @@ public class VentaModel extends Conexion {
 	public void descontarStock(int idProducto, int cantidad) {
 		try {
 			this.abrirConexion();
-           String sql  = "{CALL sp_descontarStock(?, ?)}";
+			String sql = "{CALL sp_descontarStock(?, ?)}";
 			cs = conexion.prepareCall(sql);
 			cs.setInt(1, idProducto);
 			cs.setInt(2, cantidad);
@@ -93,69 +93,98 @@ public class VentaModel extends Conexion {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-	      this.cerrarConexion();
+			this.cerrarConexion();
 		}
 	}
+
 	public List<Venta> listarVentas() {
-	    List<Venta> lista = new ArrayList<>();
-	    try {
-	        String sql = "{CALL sp_listarVentas()}"; 
-	        this.abrirConexion();
-	        cs = conexion.prepareCall(sql);
-	        rs = cs.executeQuery();
-	        
-	        while (rs.next()) {
-	            Venta v = new Venta();
-	            v.setId_venta(rs.getInt("id_venta"));
-	            v.setId_cliente(rs.getInt("id_cliente"));
-	            v.setNombreCliente(rs.getString("cliente")); 
-	            v.setFecha(rs.getDate("fecha"));
-	            v.setTotal(rs.getDouble("total"));
-	            v.setTipo_pago(rs.getString("tipo_pago"));
-	            v.setMonto_pagado(rs.getDouble("monto_pagado"));
-	            lista.add(v);
-	        }
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    } finally {
-	        this.cerrarConexion();
-	    }
-	    return lista;
+		List<Venta> lista = new ArrayList<>();
+		try {
+			String sql = "{CALL sp_listarVentas()}";
+			this.abrirConexion();
+			cs = conexion.prepareCall(sql);
+			rs = cs.executeQuery();
+
+			while (rs.next()) {
+				Venta v = new Venta();
+				v.setId_venta(rs.getInt("id_venta"));
+				v.setId_cliente(rs.getInt("id_cliente"));
+				v.setNombreCliente(rs.getString("cliente"));
+				v.setFecha(rs.getDate("fecha"));
+				v.setTotal(rs.getDouble("total"));
+				v.setTipo_pago(rs.getString("tipo_pago"));
+				v.setMonto_pagado(rs.getDouble("monto_pagado"));
+				lista.add(v);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			this.cerrarConexion();
+		}
+		return lista;
 	}
 
 	public Venta obtenerVentaporId(int idVenta) {
-	    Venta venta = null;
-	    try {
-	       
-	        String sql = "{CALL sp_obtenerVentaPorId(?)}";
-	        this.abrirConexion();
-	        cs = conexion.prepareCall(sql);
-	        cs.setInt(1, idVenta);
+		Venta venta = null;
+		try {
 
-	        rs = cs.executeQuery();
+			String sql = "{CALL sp_obtenerVentaPorId(?)}";
+			this.abrirConexion();
+			cs = conexion.prepareCall(sql);
+			cs.setInt(1, idVenta);
 
-	        if (rs.next()) {
-	            venta = new Venta();
-	            venta.setId_venta(rs.getInt("id_venta"));
-	            venta.setId_cliente(rs.getInt("id_cliente"));
-	            venta.setIdusuario(rs.getInt("idusuario")); 
-	            venta.setFecha(rs.getDate("fecha"));  
-	            venta.setTotal(rs.getDouble("total"));
-	            venta.setTipo_pago(rs.getString("tipo_pago"));
-	            venta.setMonto_pagado(rs.getDouble("monto_pagado"));	         
-	            venta.setNombreCliente(rs.getString("nombreCliente")); 
-	        }
+			rs = cs.executeQuery();
 
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    } finally {
-	        this.cerrarConexion();
-	    }
+			if (rs.next()) {
+				venta = new Venta();
+				venta.setId_venta(rs.getInt("id_venta"));
+				venta.setId_cliente(rs.getInt("id_cliente"));
+				venta.setIdusuario(rs.getInt("idusuario"));
+				venta.setFecha(rs.getDate("fecha"));
+				venta.setTotal(rs.getDouble("total"));
+				venta.setTipo_pago(rs.getString("tipo_pago"));
+				venta.setMonto_pagado(rs.getDouble("monto_pagado"));
+				venta.setNombreCliente(rs.getString("nombreCliente"));
+			}
 
-	    return venta;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			this.cerrarConexion();
+		}
+
+		return venta;
 	}
-	
 
+	public int eliminarVenta(int idVenta) {
+		int resultado = 0;
+		java.sql.PreparedStatement ps = null; // Use fully qualified or add import
+		try {
+			this.abrirConexion();
+			// 1. Eliminar detalles primero (Foreign Key constraint)
+			String sqlDetalle = "DELETE FROM detalle_venta WHERE id_venta = ?";
+			ps = conexion.prepareStatement(sqlDetalle);
+			ps.setInt(1, idVenta);
+			ps.executeUpdate();
+			ps.close();
 
+			// 2. Eliminar venta
+			String sqlVenta = "DELETE FROM venta WHERE id_venta = ?";
+			ps = conexion.prepareStatement(sqlVenta);
+			ps.setInt(1, idVenta);
+			resultado = ps.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (ps != null)
+					ps.close();
+			} catch (Exception e) {
+			}
+			this.cerrarConexion();
+		}
+		return resultado;
+	}
 
 }

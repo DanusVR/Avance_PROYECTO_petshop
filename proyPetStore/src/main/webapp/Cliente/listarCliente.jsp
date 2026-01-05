@@ -72,10 +72,10 @@
 													<button
 														onclick="modalCliente.abrir('editar', <%=cliente.getId_cliente()%>)"
 														class="btn btn-warning btn-sm">Editar</button>
-													<a href="<%=request.getContextPath()%>/ClienteController?op=eliminar&id=<%=cliente.getId_cliente()%>"
-														class="btn btn-danger btn-sm"
-														onclick="return confirm('¿Seguro de eliminar este cliente?')">
-														Eliminar </a>
+													<button
+														onclick="eliminarRegistro('/ClienteController?op=eliminar&id=<%=cliente.getId_cliente()%>')"
+														class="btn btn-danger btn-sm">
+														Eliminar </button>
 												</td>
 											</tr>
 											<% } } else { %>

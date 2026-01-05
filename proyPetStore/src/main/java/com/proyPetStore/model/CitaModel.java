@@ -63,26 +63,14 @@ public class CitaModel extends Conexion {
 			cs.setString(6, c.getObservacion());
 			filas = cs.executeUpdate();
 
-			// Si se insertó correctamente, guardar en historial médico
+			//  guardar en historial médico
 			if (filas > 0) {
 				// 1. Obtener datos del servicio para la descripción
 				ServicioModel sm = new ServicioModel();
 				Servicio s = sm.obtenerServicio(c.getId_servicio());
 				String descripcionHistorial = "Servicio: " + (s != null ? s.getNombre() : "Desconocido");
 
-				// 2. Insertar en historial médico
-				// Re-abrir conexión porque ServicioModel la cierra
-				// o usar una nueva sentencia en la misma si fuera posible,
-				// pero CitaModel extiende conexion, asi que hay que tener cuidado con el estado
-				// de 'conexion'.
-				// Al llamar a sm.obtenerServicio, ese modelo abre y cierra SU propia conexión
-				// si extiende Conexion.
-				// Pero 'this.conexion' sigue abierta?
-				// Revisando CitaModel: extiende Conexion.
-				// ServicioModel extiende Conexion.
-				// Son instancias diferentes, sus conexiones son independientes.
-				// PERO 'this.conexion' de CitaModel SÍ está abierta aqui.
-
+				
 				String sqlHistorial = "{CALL sp_insertar_historial_medico(?, ?, ?)}";
 				cs = conexion.prepareCall(sqlHistorial);
 				cs.setInt(1, c.getId_mascota());

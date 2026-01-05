@@ -61,10 +61,11 @@
 											<button class="btn btn-primary btn-sm"
 												onclick="modalReciboFunc.abrir(<%=v.getId_venta()%>)">
 												Ver Recibo</button>
-											<a href="<%=request.getContextPath()%>/VentaController?op=eliminar&id=<%=v.getId_venta()%>"
-												class="btn btn-danger btn-sm"
-												onclick="return confirm('¿Seguro de eliminar esta venta?')">
-												🗑 Eliminar </a>
+											<button
+												onclick="eliminarRegistro('/VentaController?op=eliminar&id=<%=v.getId_venta()%>')"
+												class="btn btn-danger btn-sm">
+												🗑 Eliminar
+											</button>
 										</td>
 									</tr>
 									<% } } else { %>
@@ -96,19 +97,21 @@
 				<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 				<script>
-					const modalReciboFunc = {
-						abrir: function (idVenta) {
-							let url = 'VentaController?op=verRecibo&idVenta=' + idVenta;
+					if (!window.modalReciboFunc) {
+						window.modalReciboFunc = {
+							abrir: function (idVenta) {
+								let url = 'VentaController?op=verRecibo&idVenta=' + idVenta;
 
-							fetch(url)
-								.then(res => res.text())
-								.then(html => {
-									document.querySelector('#modalRecibo .modal-body').innerHTML = html;
-									new bootstrap.Modal(document.getElementById('modalRecibo')).show();
-								})
-								.catch(err => console.error("Error Recibo:", err));
-						}
-					};
+								fetch(url)
+									.then(res => res.text())
+									.then(html => {
+										document.querySelector('#modalRecibo .modal-body').innerHTML = html;
+										new bootstrap.Modal(document.getElementById('modalRecibo')).show();
+									})
+									.catch(err => console.error("Error Recibo:", err));
+							}
+						};
+					}
 
 				</script>
 

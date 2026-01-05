@@ -95,8 +95,8 @@ public class CompraModel extends Conexion {
 
 		try {
 			this.abrirConexion();
-			this.conexion.setAutoCommit(false); 
-			
+			this.conexion.setAutoCommit(false);
+
 			// Insertar la compra
 			String sqlCompra = "{CALL sp_insertarCompra(?, ?, ?, ?)}";
 			cs = conexion.prepareCall(sqlCompra);
@@ -106,16 +106,14 @@ public class CompraModel extends Conexion {
 			cs.registerOutParameter(4, java.sql.Types.INTEGER);
 			cs.executeUpdate();
 
-
 			int idCompraGenerada = cs.getInt(4);
 
 			// Insertar cada detalle y actualizar stock usando CompraDetalleModel
 			// Asignar el id_compra generado a cada detalle
 			for (CompraDetalle d : compra.getDetalles()) {
 				d.setId_compra(idCompraGenerada);
-			}			
+			}
 
-		
 			detalleModel.insertarListaDetallesConConexion(compra.getDetalles(), this.conexion);
 
 			this.conexion.commit(); // Confirmar transaccion
@@ -139,19 +137,49 @@ public class CompraModel extends Conexion {
 	// Eliminar
 	public int eliminarCompra(int idCompra) {
 		int filas = 0;
+		// 1. Obtener detalles para revertir stock (antes de abrir nueva tx)
+		List<CompraDetalle> detalles = detalleModel.listarPorCompra(idCompra);
+
+		java.sql.PreparedStatement ps = null;
 
 		try {
 			this.abrirConexion();
-			// Llamamos al procedimiento que anula la compra y actualiza stock
-			String sql = "{CALL sp_anularCompra(?)}";
-			cs = conexion.prepareCall(sql);
-			cs.setInt(1, idCompra);
+			this.conexion.setAutoCommit(false);
 
-			filas = cs.executeUpdate();
+			// 2. Descontar Stock (Revertir la compra)
+			String sqlStock = "UPDATE producto SET stock = stock - ? WHERE id_producto = ?";
+			ps = conexion.prepareStatement(sqlStock);
+
+			for (CompraDetalle d : detalles) {
+				ps.setInt(1, d.getCantidad());
+				ps.setInt(2, d.getId_producto());
+				ps.executeUpdate();
+			}
+			ps.close();
+
+			// 3. Cambiar estado a 'anulado'
+			String sqlAnular = "UPDATE compra SET estado = 'anulado' WHERE id_compra = ?";
+			ps = conexion.prepareStatement(sqlAnular);
+			ps.setInt(1, idCompra);
+
+			filas = ps.executeUpdate();
+
+			this.conexion.commit();
 
 		} catch (Exception e) {
+			try {
+				if (this.conexion != null)
+					this.conexion.rollback();
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
 			e.printStackTrace();
 		} finally {
+			try {
+				if (ps != null)
+					ps.close();
+			} catch (Exception ex) {
+			}
 			this.cerrarConexion();
 		}
 

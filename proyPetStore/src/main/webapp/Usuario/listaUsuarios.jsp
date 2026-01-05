@@ -60,8 +60,9 @@
                                                 for (Usuario usuario : listaUsuarios) {
                                                 String badgeEstado = "ACTIVO".equals(usuario.getEstado()) ? "bg-success"
                                                 : "bg-danger";
-                                                String badgeRol = "ADMIN".equals(usuario.getRol()) ? "bg-warning     text-dark" : "bg-secondary";
-                                           
+                                                String badgeRol = "ADMIN".equals(usuario.getRol()) ? "bg-warning  text-dark" : "bg-secondary";
+                                              
+
                                                 %>
                                                 <tr>
                                                     <td><code><%=usuario.getIdUsuario()%></code></td>
@@ -149,9 +150,7 @@
 
                 <script>
                     function eliminar(id) {
-                        if (confirm('¿Está seguro de eliminar este usuario? Esta acción no se puede deshacer.')) {
-                            window.location.href = '<%=url%>UsuarioController?op=eliminar&id=' + id;
-                        }
+                        eliminarRegistro('<%=url%>UsuarioController?op=eliminar&id=' + id, '¿Está seguro de eliminar este usuario? Esta acción no se puede deshacer.');
                     }
                 </script>
 

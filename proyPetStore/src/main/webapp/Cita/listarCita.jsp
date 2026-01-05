@@ -87,11 +87,11 @@
                                                         Editar
                                                     </button>
 
-                                                    <a href="<%=request.getContextPath()%>/CitaController?op=eliminar&id=<%=c.getId_cita()%>"
-                                                        class="btn btn-danger btn-sm"
-                                                        onclick="return confirm('¿Seguro de eliminar esta cita?')">
+                                                    <button
+                                                        onclick="eliminarRegistro('/CitaController?op=eliminar&id=<%=c.getId_cita()%>')"
+                                                        class="btn btn-danger btn-sm">
                                                         Eliminar
-                                                    </a>
+                                                    </button>
                                                 </td>
                                             </tr>
 

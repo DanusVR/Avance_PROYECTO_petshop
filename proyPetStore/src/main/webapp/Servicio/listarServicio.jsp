@@ -78,11 +78,10 @@
 												<td>
 													<button
 														onclick="modalServicio.abrir('editar', <%=s.getId_servicio()%>)"
-														class="btn btn-warning btn-sm">Editar</button> <a
-														href="<%=request.getContextPath()%>/ServicioController?op=eliminar&id=<%=s.getId_servicio()%>"
-														class="btn btn-danger btn-sm"
-														onclick="return confirm('¿Seguro de eliminar este servicio?')">
-														Eliminar </a>
+														class="btn btn-warning btn-sm">Editar</button> <button
+														onclick="eliminarRegistro('/ServicioController?op=eliminar&id=<%=s.getId_servicio()%>')"
+														class="btn btn-danger btn-sm">
+														Eliminar </button>
 												</td>
 											</tr>
 

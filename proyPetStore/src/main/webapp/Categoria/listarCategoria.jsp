@@ -55,11 +55,10 @@
 												<td class="acciones">
 													<button
 														onclick="modalCategoria.abrir('editar', <%=cat.getId_categoria()%>)"
-														class="btn btn-warning btn-sm">Editar</button> <a
-														href="<%=request.getContextPath()%>/CategoriaController?op=eliminar&id=<%=cat.getId_categoria()%>"
-														class="btn btn-danger btn-sm"
-														onclick="return confirm('¿Seguro de eliminar este categoria?')">
-														Eliminar </a>
+														class="btn btn-warning btn-sm">Editar</button> <button
+														onclick="eliminarRegistro('/CategoriaController?op=eliminar&id=<%=cat.getId_categoria()%>')"
+														class="btn btn-danger btn-sm">
+														Eliminar </button>
 												</td>
 											</tr>
 											<% } } else { %>

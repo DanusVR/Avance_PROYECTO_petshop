@@ -67,9 +67,9 @@
                                                 <td>
                                                     <button class="btn btn-warning btn-sm"
                                                         onclick="modalProveedor.abrir('editar', <%=p.getIdProveedor()%>)">Editar</button>
-                                                    <a href="<%=request.getContextPath()%>/ProveedorController?op=eliminar&id=<%=p.getIdProveedor()%>"
-                                                        class="btn btn-danger btn-sm"
-                                                        onclick="return confirm('¿Eliminar proveedor?')">Eliminar</a>
+                                                    <button
+                                                        onclick="eliminarRegistro('/ProveedorController?op=eliminar&id=<%=p.getIdProveedor()%>')"
+                                                        class="btn btn-danger btn-sm">Eliminar</button>
                                                 </td>
                                             </tr>
                                             <% } } else { %>

@@ -86,11 +86,11 @@
                                                         onclick="modalProducto.abrir('editar', <%=p.getId_producto()%>)"
                                                         class="btn btn-warning btn-sm">✏ Editar</button>
 
-                                                    <a href="<%=request.getContextPath()%>/ProductoController?op=eliminar&id=<%=p.getId_producto()%>"
-                                                        class="btn btn-danger btn-sm"
-                                                        onclick="return confirm('¿Seguro de eliminar este producto?')">
+                                                    <button
+                                                        onclick="eliminarRegistro('/ProductoController?op=eliminar&id=<%=p.getId_producto()%>')"
+                                                        class="btn btn-danger btn-sm">
                                                         🗑 Eliminar
-                                                    </a>
+                                                    </button>
                                                 </td>
                                             </tr>
                                             <% } } else { %>

@@ -42,9 +42,9 @@
                                         <td>
                                             <button class="btn btn-warning btn-sm"
                                                 onclick="modalCompra.abrir('ver', <%=c.getId_compra()%>)">Ver</button>
-                                            <a href="<%=request.getContextPath()%>/CompraController?op=eliminar&id=<%=c.getId_compra()%>"
-                                                class="btn btn-danger btn-sm"
-                                                onclick="return confirm('¿Seguro de anular esta compra?')">Anular</a>
+                                            <button
+                                                onclick="eliminarRegistro('/CompraController?op=eliminar&id=<%=c.getId_compra()%>', '¿Seguro de anular esta compra?')"
+                                                class="btn btn-danger btn-sm">Anular</button>
                                         </td>
                                     </tr>
                                     <% } } else { %>

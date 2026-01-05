@@ -66,6 +66,9 @@ public class VentaController extends HttpServlet {
 			case "verRecibo":
 				verRecibo(request, response);
 				break;
+			case "eliminar":
+				eliminar(request, response);
+				break;
 
 			default:
 				mostrarFormulario(request, response);
@@ -207,6 +210,16 @@ public class VentaController extends HttpServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	private void eliminar(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			int idVenta = Integer.parseInt(request.getParameter("id"));
+			ventaModel.eliminarVenta(idVenta);
+		} catch (Exception e) {
+			Logger.getLogger(VentaController.class.getName()).log(Level.SEVERE, null, e);
+		}
+		listar(request, response);
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)

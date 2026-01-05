@@ -90,11 +90,11 @@
                                                                             onclick="modalHistorial.abrir('editar', <%= h.getId_historial() %>)">
                                                                             ✏️ Editar
                                                                         </button>
-                                                                        <a href="<%= url %>HistorialMedicoController?op=eliminar&id_historial=<%= h.getId_historial() %>"
-                                                                            class="btn btn-danger btn-sm"
-                                                                            onclick="return confirm('¿Seguro de eliminar este historial?');">
+                                                                        <button
+                                                                            onclick="eliminarRegistro('HistorialMedicoController?op=eliminar&id_historial=<%= h.getId_historial() %>')"
+                                                                            class="btn btn-danger btn-sm">
                                                                             🗑️ Eliminar
-                                                                        </a>
+                                                                        </button>
                                                                     </td>
                                                                 </tr>
                                                                 <% } } else { %>
