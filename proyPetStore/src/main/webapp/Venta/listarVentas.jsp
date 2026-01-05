@@ -28,7 +28,7 @@
 					<table class="table table-striped table-hover align-middle">
 						<thead class="table-dark">
 							<tr>
-								<th>ID</th>
+								
 								<th>Cliente</th>
 								<th>Fecha</th>
 								<th>Total</th>
@@ -42,9 +42,7 @@
 									for (Venta v : listaVentas) {
 									%>
 									<tr>
-										<td>
-											<%=v.getId_venta()%>
-										</td>
+										
 										<td>
 											<%=v.getNombreCliente() !=null ? v.getNombreCliente() : "-" %>
 										</td>

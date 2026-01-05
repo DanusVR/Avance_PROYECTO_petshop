@@ -32,7 +32,7 @@
 							<table class="table table-striped table-hover align-middle">
 								<thead class="table-dark">
 									<tr>
-										<th>ID</th>
+										
 										<th>NOMBRE</th>
 										<th>TIPO</th>
 										<th>MASCOTA</th>
@@ -49,9 +49,7 @@
 											for (Servicio s : listarServicio) {
 											%>
 											<tr>
-												<td>
-													<%=s.getId_servicio()%>
-												</td>
+												
 												<td>
 													<%=s.getNombre()%>
 												</td>

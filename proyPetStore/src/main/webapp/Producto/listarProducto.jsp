@@ -33,7 +33,7 @@
                             <table class="table table-striped table-hover align-middle">
                                 <thead class="table-dark">
                                     <tr>
-                                        <th>ID</th>
+                                       
                                         <th>NOMBRE</th>
                                         <th>CATEGORÍA</th>
                                         <th>DESCRIPCIÓN</th>
@@ -51,9 +51,7 @@
                                             for (Producto p : listarProducto) {
                                             %>
                                             <tr>
-                                                <td>
-                                                    <%=p.getId_producto()%>
-                                                </td>
+                                                
                                                 <td>
                                                     <%=p.getNombre()%>
                                                 </td>

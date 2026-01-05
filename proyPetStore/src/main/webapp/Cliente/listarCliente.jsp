@@ -33,7 +33,7 @@
 							<table class="table table-striped table-hover align-middle">
 								<thead class="table-dark">
 									<tr>
-										<th>ID</th>
+									
 										<th>DNI</th>
 										<th>NOMBRE</th>
 										<th>APELLIDO</th>
@@ -49,9 +49,7 @@
 											for (Cliente cliente : listarCliente) {
 											%>
 											<tr>
-												<td>
-													<%=cliente.getId_cliente()%>
-												</td>
+												
 												<td>
 													<%=cliente.getDni()%>
 												</td>

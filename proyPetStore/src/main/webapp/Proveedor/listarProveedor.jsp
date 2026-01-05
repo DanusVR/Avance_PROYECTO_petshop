@@ -26,7 +26,7 @@
                             <table class="table table-striped table-hover align-middle">
                                 <thead class="table-dark">
                                     <tr>
-                                        <th>ID</th>
+                                       
                                         <th>RUC</th>
                                         <th>NOMBRE</th>
                                         <th>TELÉFONO</th>
@@ -43,9 +43,7 @@
                                             for (Proveedor p : lista) {
                                             %>
                                             <tr>
-                                                <td>
-                                                    <%=p.getIdProveedor()%>
-                                                </td>
+                                               
                                                 <td>
                                                     <%=p.getRuc()%>
                                                 </td>

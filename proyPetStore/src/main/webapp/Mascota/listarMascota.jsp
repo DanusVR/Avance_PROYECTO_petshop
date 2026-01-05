@@ -34,7 +34,7 @@
                             <table class="table table-striped table-hover align-middle">
                                 <thead class="table-dark">
                                     <tr>
-                                        <th>ID</th>
+                                       
                                         <th>NOMBRE</th>
                                         <th>ESPECIE</th>
                                         <th>RAZA</th>
@@ -48,10 +48,7 @@
                                 <tbody>
                                     <% if (listarMascota !=null && !listarMascota.isEmpty()) { for (Mascota mascota :
                                         listarMascota) { %>
-                                        <tr>
-                                            <td>
-                                                <%=mascota.getId_mascota()%>
-                                            </td>
+                                        <tr>                                            
                                             <td>
                                                 <%=mascota.getNombre_mascota()%>
                                             </td>

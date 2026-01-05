@@ -11,7 +11,7 @@
                     <table class="table table-striped table-hover align-middle">
                         <thead class="table-dark">
                             <tr>
-                                <th>ID</th>
+                              
                                 <th>Proveedor</th>
                                 <th>Fecha</th>
                                 <th>Total</th>
@@ -25,9 +25,7 @@
                                     for(Compras c : listaCompras){
                                     %>
                                     <tr>
-                                        <td>
-                                            <%= c.getId_compra() %>
-                                        </td>
+                                      
                                         <td>
                                             <%= c.getNombreProveedor() %>
                                         </td>

@@ -33,7 +33,7 @@
 							<table class="table table-striped table-hover align-middle">
 								<thead class="table-dark">
 									<tr>
-										<th>ID</th>
+										
 										<th>CATEGORIA</th>
 										<th>ACCIONES</th>
 									</tr>
@@ -45,9 +45,7 @@
 											for (Categoria cat : listarCategoria) {
 											%>
 											<tr>
-												<td>
-													<%=cat.getId_categoria()%>
-												</td>
+												
 												<td>
 													<%=cat.getNombreCat()%>
 												</td>

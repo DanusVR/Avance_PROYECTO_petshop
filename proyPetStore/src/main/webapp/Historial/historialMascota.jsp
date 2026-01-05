@@ -40,8 +40,7 @@
                                 <div class="table-responsive">
                                     <table class="table table-striped table-hover table-bordered align-middle">
                                         <thead class="table-dark">
-                                            <tr>
-                                                <th>ID</th>
+                                            <tr>                                                
                                                 <th>Fecha</th>
                                                 <th>Descripción</th>
                                                 <th>Acciones</th>
@@ -51,9 +50,7 @@
                                             <% if(listaHistorial !=null && !listaHistorial.isEmpty()) {
                                                 for(Historial_Medico h : listaHistorial) { %>
                                                 <tr>
-                                                    <td>
-                                                        <%= h.getId_historial() %>
-                                                    </td>
+                                                    
                                                     <td>
                                                         <%= h.getFecha() %>
                                                     </td>

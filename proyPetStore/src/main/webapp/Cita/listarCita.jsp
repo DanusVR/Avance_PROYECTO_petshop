@@ -31,7 +31,7 @@
                             <table class="table table-striped table-hover align-middle">
                                 <thead class="table-dark">
                                     <tr>
-                                        <th>ID</th>
+                                       
                                         <th>MASCOTA</th>
                                         <th>SERVICIO</th>
                                         <th>FECHA</th>
@@ -57,9 +57,7 @@
                                             %>
 
                                             <tr>
-                                                <td>
-                                                    <%= c.getId_cita() %>
-                                                </td>
+                                                
                                                 <td>
                                                     <%= c.getMascota() %>
                                                 </td>

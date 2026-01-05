@@ -54,7 +54,7 @@
                                                         class="table table-striped table-hover table-bordered align-middle">
                                                         <thead class="table-dark">
                                                             <tr>
-                                                                <th>ID</th>
+                                                               
                                                                 <th>Mascota</th>
                                                                 <th>Fecha</th>
                                                                 <th>Descripción</th>
@@ -65,9 +65,7 @@
                                                             <% if(listaHistorial !=null && !listaHistorial.isEmpty()) {
                                                                 for(Historial_Medico h : listaHistorial) { %>
                                                                 <tr>
-                                                                    <td>
-                                                                        <%= h.getId_historial() %>
-                                                                    </td>
+                                                                   
                                                                     <td>
                                                                         <%= h.getNombreMascota() %>
                                                                     </td>
