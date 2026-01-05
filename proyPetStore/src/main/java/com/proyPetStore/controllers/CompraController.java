@@ -37,7 +37,7 @@ public class CompraController extends HttpServlet {
     @Override
     public void init() throws ServletException {
         try {
-            System.out.println("DEBUG: CompraController initialized");
+            System.out.println("DEBUG: CompraController (v2) initialized - Force Recompile");
             modelo = new CompraModel();
             proveedorModel = new ProveedorModel();
             productoModel = new ProductoModel();

@@ -78,6 +78,7 @@ public class VentaController extends HttpServlet {
 
 	private void mostrarFormulario(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		System.out.println("DEBUG: VentaController.mostrarFormulario called");
 		request.setAttribute("clientes", clienteModel.listarClientes());
 		request.setAttribute("productos", productoModel.listarProducto());
 		request.setAttribute("servicios", servicioModel.listarServicios());
@@ -149,7 +150,7 @@ public class VentaController extends HttpServlet {
 
 			Venta venta = new Venta();
 			venta.setId_cliente(Integer.parseInt(idClienteStr));
-			venta.setIdusuario(1); 
+			venta.setIdusuario(1);
 			venta.setTipo_pago(request.getParameter("tipo_pago"));
 
 			String montoStr = request.getParameter("monto_pagado");
