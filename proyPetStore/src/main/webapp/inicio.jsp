@@ -221,9 +221,9 @@
                                 <i class="fas fa-chart-bar"></i> Reportes
                             </a>
 
-                            <a href="<%=contextPath%>/LoginController?accion=logout">
+                          <!--<a href="<//%=contextPath%>/LoginController?accion=logout">
                                 <i class="fas fa-door-open"></i> Salir
-                            </a>
+                            </a>-->
                 </div>
             </div>
             <!-- Navbar -->
@@ -357,7 +357,6 @@
                         .then(html => {
                             cont.innerHTML = html;
 
-                            // Execute scripts in the fragment
                             Array.from(cont.querySelectorAll("script")).forEach(oldScript => {
                                 const newScript = document.createElement("script");
                                 Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
@@ -469,7 +468,7 @@
                 // --- MODAL HISTORIAL ---
                 const modalHistorial = {
                     abrir: function (arg1, arg2 = null) {
-                        // Handle simple 'nuevo'/'editar' or direct idMascota call
+                       
                         let url = '';
                         if (typeof arg1 === 'number') {
                             // Called via modalHistorial.abrir(idMascota) from Mascota list
@@ -494,7 +493,6 @@
                     let fechaElement = document.querySelector('input[name="fecha"]');
                     let descripcionElement = document.querySelector('textarea[name="descripcion"]');
 
-                    // Check if elements exist before value (in case form structure varies)
                     if (!mascotaElement || !fechaElement || !descripcionElement) return true;
 
                     let mascota = mascotaElement.value;
@@ -614,7 +612,7 @@
                     }
                 };
 
-                // --- LÓGICA FORMULARIO COMPRA ---
+                // ---  FORMULARIO COMPRA ---
                 function agregarFila() {
                     const tbody = document.querySelector('#tablaDetalle tbody');
                     if (!tbody) return;
@@ -740,7 +738,7 @@
                         fetch(contextPath + '/' + url).then(r => r.text()).then(html => {
                             document.querySelector('#modalUsuario .modal-body').innerHTML = html;
                             new bootstrap.Modal(document.getElementById('modalUsuario')).show();
-                            // Initialize password toggle if present
+                       
                             const toggleBtn = document.getElementById('togglePassword');
                             if (toggleBtn) {
                                 toggleBtn.addEventListener('click', function () {
@@ -770,13 +768,7 @@
                     return true;
                 }
 
-                /**
-                 * Generic AJAX Form Submission Handler
-                 * @param {Event} event - The submit event
-                 * @param {string} modalId - The ID of the modal to close on success
-                 * @param {string} refreshUrl - The URL (fragment) to fetch to refresh the list
-                 * @param {string} validateFn - Name of the validation function to call (optional)
-                 */
+              
                 function submitFormAjax(event, modalId, refreshUrl, validateFn) {
                     event.preventDefault();
 
@@ -795,7 +787,6 @@
                         params.append(pair[0], pair[1]);
                     }
 
-                    // Append 'Ajax' to the operation if not already present
                     let op = params.get("op");
                     if (op && !op.endsWith("Ajax")) {
                         params.set("op", op + "Ajax");
@@ -819,8 +810,7 @@
                                 // Refresh list
                                 fetchFragment(refreshUrl);
 
-                                // Optional: Show success message (e.g. using a toast or alert)
-                                // alert(data.mensaje); 
+                           
                             } else {
                                 alert("Error: " + data.mensaje);
                             }

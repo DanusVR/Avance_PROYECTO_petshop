@@ -4,7 +4,7 @@
     <input type="hidden" name="op" value="insertar">
 
     <div class="mb-3">
-        <label class="form-label">Nombre de Categoría:</label>
+        <label class="form-label">Nombre de Categoria:</label>
         <input type="text" id="nombreCat" name="nombreCat" class="form-control" required>
     </div>
 

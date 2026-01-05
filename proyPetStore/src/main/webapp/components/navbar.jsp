@@ -40,16 +40,7 @@ if(nombreUsuario == null) {
                                 <i class="fas fa-user"></i> <%=nombreUsuario%>
                             </h6>
                         </li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li>
-                            <a class="dropdown-item" href="#">
-                                <i class="fas fa-user-edit"></i> Mi Perfil
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="#">
-                                <i class="fas fa-key"></i> Cambiar Contraseña
-                            </a>
+                       
                         </li>
                         <li><hr class="dropdown-divider"></li>
                         <li>

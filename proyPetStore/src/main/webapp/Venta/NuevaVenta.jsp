@@ -60,7 +60,7 @@
 							<% } %>
 
 								<!-- FORM: Agregar Ítem -->
-								<form action="VentaController" method="post">
+								<form action="VentaController" method="post" onsubmit="submitVentaForm(event)">
 									<input type="hidden" name="op" value="agregar">
 
 									<div class="row g-3">
@@ -186,7 +186,7 @@
 								</div>
 
 								<!-- Formulario Registrar Venta -->
-								<form action="VentaController" method="post">
+								<form action="VentaController" method="post" onsubmit="submitVentaForm(event)">
 									<input type="hidden" name="op" value="registrar"> <input type="hidden"
 										name="id_Cliente" value="<%=request.getParameter(" id_Cliente") !=null ?
 										request.getParameter("id_Cliente") : "" %>">
@@ -223,15 +223,54 @@
 				<script>
 					function mostrarCampos() {
 						const tipo = document.getElementById("tipo").value;
-						document.getElementById("divProd").style.display = tipo === "producto" ? "block"
-							: "none";
-						document.getElementById("divCant").style.display = tipo === "producto" ? "block"
-							: "none";
-						document.getElementById("divServ").style.display = tipo === "servicio" ? "block"
-							: "none";
+						const divProd = document.getElementById("divProd");
+						if (divProd) divProd.style.display = tipo === "producto" ? "block" : "none";
+
+						const divCant = document.getElementById("divCant");
+						if (divCant) divCant.style.display = tipo === "producto" ? "block" : "none";
+
+						const divServ = document.getElementById("divServ");
+						if (divServ) divServ.style.display = tipo === "servicio" ? "block" : "none";
 					}
-					window.onload = mostrarCampos;
+
+					function submitVentaForm(event) {
+						event.preventDefault();
+						const form = event.target;
+						const formData = new FormData(form);
+						const params = new URLSearchParams();
+						for (const pair of formData.entries()) {
+							params.append(pair[0], pair[1]);
+						}
+
+						fetch(form.action, {
+							method: 'POST',
+							body: params,
+							headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+						})
+							.then(response => response.text())
+							.then(html => {
+								const cont = document.getElementById("contenidoPrincipal");
+								cont.innerHTML = html;
+								// Re-execute scripts logic if needed, or simply calling functionality
+								// Since the response is the full JSP fragment, scripts inside it need to run 
+								// for showing/hiding fields again.
+								// Extract and run scripts
+								const scripts = cont.querySelectorAll("script");
+								scripts.forEach(oldScript => {
+									const newScript = document.createElement("script");
+									newScript.text = oldScript.innerHTML;
+									oldScript.parentNode.replaceChild(newScript, oldScript);
+								});
+								// Trigger onload manually
+								mostrarCampos();
+							})
+							.catch(err => console.error("Error:", err));
+					}
+
+					// Initial call
+					mostrarCampos();
 				</script>
+
 
 			</body>
 
