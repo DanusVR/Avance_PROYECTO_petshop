@@ -203,12 +203,15 @@
                         </a>
                         <% } %>
 
-                            <a id="menuCompras"><i class="fas fa-bag"></i> Compras</a>
-                            <div id="submenuProductos" class="submenu">
-                                <a onclick="fetchFragment('/CompraController?op=listar?op=nuevo')">➕ Nuevo Ventas</a>
-                                <a onclick="fetchFragment('/CompraController?op=listar')">📋 Listar Ventas</a>
-
+                            <a id="menuCompras">
+                                <i class="fas fa-shopping-bag"></i> Compras</a>
+                            <div id="submenuCompras" class="submenu">
+                                <!-- Nueva Compra: Opens Modal -->
+                                <a onclick="fetchFragment('/CompraController?op=nuevo')">➕ Nueva Compra</a>
+                                <!-- Listar Compras: Loads Fragment -->
+                                <a onclick="fetchFragment('/CompraController?op=listar')">📋 Listar Compras</a>
                             </div>
+
 
                             <a onclick="fetchFragment('/HistorialMedicoController?op=listar')">
                                 <i class="fas fa-history"></i> Historial
@@ -342,6 +345,7 @@
                 document.getElementById("menuMascotas").onclick = () => toggle("submenuMascotas");
                 document.getElementById("menuVentas").onclick = () => toggle("submenuVentas");
                 document.getElementById("menuProductos").onclick = () => toggle("submenuProductos");
+                document.getElementById("menuCompras").onclick = () => toggle("submenuCompras");
 
                 function fetchFragment(url) {
                     const cont = document.getElementById("contenidoPrincipal");
@@ -350,6 +354,15 @@
                         .then(r => r.text())
                         .then(html => {
                             cont.innerHTML = html;
+
+                            // Execute scripts in the fragment
+                            Array.from(cont.querySelectorAll("script")).forEach(oldScript => {
+                                const newScript = document.createElement("script");
+                                Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+                                newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+                                oldScript.parentNode.replaceChild(newScript, oldScript);
+                            });
+
                             void cont.offsetWidth;
                             cont.classList.add("fade-enter");
                         })
@@ -605,8 +618,22 @@
                     if (!tbody) return;
                     const fila = document.createElement('tr');
 
+
                     let options = '<option value="">-- Producto --</option>';
-                    if (window.listaProductos) {
+
+                    // Intentar obtener los productos del input oculto
+                    const inputData = document.getElementById('dataProductos');
+                    if (inputData && inputData.value) {
+                        try {
+                            const lista = JSON.parse(inputData.value);
+                            lista.forEach(p => {
+                                options += `<option value="${p.id}" data-precio="${p.precio}">${p.nombre}</option>`;
+                            });
+                        } catch (e) {
+                            console.error("Error parsing productos:", e);
+                        }
+                    } else if (window.listaProductos) {
+                        // Fallback por si acaso
                         window.listaProductos.forEach(p => {
                             options += `<option value="${p.id}" data-precio="${p.precio}">${p.nombre}</option>`;
                         });

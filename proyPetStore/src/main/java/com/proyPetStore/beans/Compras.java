@@ -11,11 +11,12 @@ public class Compras {
 	private Date fecha_compra;
 	private double total;
 	private String estado;
-	
-    // lista de los productos comprados
-	private List<CompraDetalle> detalles; 	
-	
+
+	// lista de los productos comprados
+	private List<CompraDetalle> detalles;
+
 	public Compras() {
+		this.detalles = new java.util.ArrayList<>();
 	}
 
 	public Compras(int id_compra, int id_proveedor, String nombreProveedor, Date fecha_compra, double total,

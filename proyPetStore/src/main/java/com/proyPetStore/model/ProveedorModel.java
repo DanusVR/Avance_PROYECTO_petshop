@@ -129,7 +129,7 @@ public class ProveedorModel extends Conexion{
 	public int eliminarProveedor(int idProveedor) {
 	    int filas = 0;
 	    try {
-	        String sql = "CALL sp_proveedor_desactivar(?)";
+	        String sql = "CALL sp_proveedor_eliminar(?)";
 	        this.abrirConexion();
 	        cs = conexion.prepareCall(sql);
 	        cs.setInt(1, idProveedor);
