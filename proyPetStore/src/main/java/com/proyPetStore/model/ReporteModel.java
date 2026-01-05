@@ -1,5 +1,6 @@
 package com.proyPetStore.model;
 
+import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -9,30 +10,29 @@ import com.proyPetStore.beans.Venta;
 import com.proyPetStore.util.Conexion;
 
 public class ReporteModel extends Conexion {
+	
+	CallableStatement cs;
+	ResultSet rs;
 
     public List<Venta> filtrarVentas(String fechaInicio, String fechaFin) {
         List<Venta> lista = new ArrayList<>();
-        PreparedStatement ps = null;
-        ResultSet rs = null;
+      
 
-        // Use direct SQL to avoid dependency on unknown Stored Procedures
-        // Assumes tables: venta, cliente, usuarios (based on models)
-        String sql = "SELECT v.id_venta, v.fecha, c.nombre AS nombreCliente, c.apellido AS apellidoCliente, " +
+        /*String sql = "SELECT v.id_venta, v.fecha, c.nombre AS nombreCliente, c.apellido AS apellidoCliente, " +
                 "u.nombre_usuario, v.tipo_pago, v.total, v.monto_pagado " +
                 "FROM venta v " +
                 "INNER JOIN cliente c ON v.id_cliente = c.id_cliente " +
                 "INNER JOIN usuarios u ON v.idusuario = u.idusuario " +
                 "WHERE v.fecha BETWEEN ? AND ? " +
-                "ORDER BY v.fecha DESC";
+                "ORDER BY v.fecha DESC";*/
 
         try {
+        	String sql = "CALL sp_reporteVentas(?,?)";
             this.abrirConexion();
-            ps = conexion.prepareStatement(sql);
-            ps.setString(1, fechaInicio);
-            ps.setString(2, fechaFin); // Ensure dates are in 'YYYY-MM-DD' or compatible format provided by input
-                                       // type="date"
-
-            rs = ps.executeQuery();
+            cs = conexion.prepareCall(sql);
+            cs.setString(1, fechaInicio);
+            cs.setString(2, fechaFin);
+            rs = cs.executeQuery();
 
             while (rs.next()) {
                 Venta v = new Venta();
@@ -40,10 +40,10 @@ public class ReporteModel extends Conexion {
                 v.setFecha(rs.getDate("fecha"));
 
                 // Combine Name + Surname for display
-                String clienteFull = rs.getString("nombreCliente") + " " + rs.getString("apellidoCliente");
+                String clienteFull = rs.getString("cliente_nombre") + " " + rs.getString("cliente_apellido");
                 v.setNombreCliente(clienteFull);
 
-                v.setNombreUsuario(rs.getString("nombre_usuario"));
+                v.setNombreUsuario(rs.getString("usuario_nombre"));
                 v.setTipo_pago(rs.getString("tipo_pago"));
                 v.setTotal(rs.getDouble("total"));
                 v.setMonto_pagado(rs.getDouble("monto_pagado"));
@@ -57,8 +57,8 @@ public class ReporteModel extends Conexion {
             try {
                 if (rs != null)
                     rs.close();
-                if (ps != null)
-                    ps.close();
+                if (cs != null)
+                    cs.close();
                 this.cerrarConexion();
             } catch (Exception e) {
                 e.printStackTrace();
