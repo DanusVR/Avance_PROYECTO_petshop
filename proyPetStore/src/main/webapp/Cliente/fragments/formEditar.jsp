@@ -9,7 +9,8 @@
 			<div class="card shadow">
 				<div class="card-body">
 
-					<form action="<%=url%>ClienteController" method="POST" onsubmit="return validarEdicion()">
+					<form action="<%=url%>ClienteController" method="POST"
+						onsubmit="return submitFormAjax(event, 'modalCliente', '/ClienteController?op=listar', 'validarEdicion')">
 						<input type="hidden" name="op" value="modificar"> <input type="hidden" name="id_cliente"
 							value="<%=cliente.getId_cliente()%>">
 

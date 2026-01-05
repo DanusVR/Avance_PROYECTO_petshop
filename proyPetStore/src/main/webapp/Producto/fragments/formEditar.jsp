@@ -34,7 +34,7 @@
                                     <div class="card-body">
 
                                         <form action="<%=url%>ProductoController" method="POST"
-                                            onsubmit="return validarEdicion()">
+                                            onsubmit="return submitFormAjax(event, 'modalProducto', '/ProductoController?op=listar', 'validarProducto')">
 
                                             <input type="hidden" name="op" value="modificar">
                                             <input type="hidden" name="id_producto"
@@ -104,8 +104,8 @@
                                             <div class="mb-3">
                                                 <label class="form-label">Fecha de Registro</label>
                                                 <input type="date" name="fecha_registro" id="fecha_registro"
-                                                    value="<%=producto.getFecha_registro() != null ? new java.text.SimpleDateFormat("yyyy-MM-dd").format(producto.getFecha_registro()) : "" %>"
-                                                class="form-control" required>
+                                                    value='<%=producto.getFecha_registro() != null ? new java.text.SimpleDateFormat("yyyy-MM-dd").format(producto.getFecha_registro()) : "" %>'
+                                                    class="form-control" required>
                                             </div>
 
                                             <button type="submit" class="btn btn-primary w-100 mb-2">Guardar
@@ -120,28 +120,7 @@
 
                             </div>
 
-                            <!-- VALIDACIÓN JS -->
-                            <script>
-                                function validarEdicion() {
-                                    let nombre = document.getElementById("nombre").value.trim();
-                                    let categoria = document.getElementById("id_categoria").value.trim();
-                                    let stock = document.getElementById("stock").value;
-                                    let precioCosto = document.getElementById("precio_costo").value;
-                                    let precioVenta = document.getElementById("precio_venta").value;
-                                    let estado = document.getElementById("estado").value;
-                                    let fecha = document.getElementById("fecha_registro").value;
 
-                                    if (nombre === "") { alert("El nombre del producto es obligatorio"); return false; }
-                                    if (categoria === "") { alert("La categoría es obligatoria"); return false; }
-                                    if (stock === "" || isNaN(stock) || parseInt(stock) < 0) { alert("Ingrese un stock válido"); return false; }
-                                    if (precioCosto === "" || isNaN(precioCosto) || parseFloat(precioCosto) < 0) { alert("Ingrese un precio de costo válido"); return false; }
-                                    if (precioVenta === "" || isNaN(precioVenta) || parseFloat(precioVenta) < 0) { alert("Ingrese un precio de venta válido"); return false; }
-                                    if (estado === "") { alert("Seleccione un estado"); return false; }
-                                    if (fecha === "") { alert("Seleccione una fecha de registro"); return false; }
-
-                                    return true;
-                                }
-                            </script>
 
                             <script
                                 src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

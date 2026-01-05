@@ -48,9 +48,11 @@ public class ProductoController extends HttpServlet {
             case "editar":
                 cargarFormularioEditar(request, response);
                 break;
+            case "insertarAjax":
             case "insertar":
                 insertar(request, response, esAjax);
                 break;
+            case "modificarAjax":
             case "modificar":
                 modificar(request, response, esAjax);
                 break;
@@ -69,7 +71,7 @@ public class ProductoController extends HttpServlet {
 
             request.setAttribute("listarProducto", modelo.listarProducto());
             request.getRequestDispatcher("/Producto/listarProducto.jsp")
-                   .forward(request, response);
+                    .forward(request, response);
 
         } catch (Exception e) {
             Logger.getLogger(ProductoController.class.getName()).log(Level.SEVERE, null, e);
@@ -80,10 +82,10 @@ public class ProductoController extends HttpServlet {
     private void cargarFormularioNuevo(HttpServletRequest request, HttpServletResponse response) {
         try {
             response.setContentType("text/html; charset=UTF-8");
-            //combo categoria
+            // combo categoria
             request.setAttribute("listarCategoria", modelo.listarCategoria());
             String jsp = "/Producto/fragments/formNuevo.jsp";
-            
+
             request.getRequestDispatcher(jsp).forward(request, response);
 
         } catch (ServletException | IOException e) {
@@ -100,13 +102,13 @@ public class ProductoController extends HttpServlet {
             Producto producto = modelo.obtenerProducto(id);
 
             request.setAttribute("producto", producto);
-            if(producto!=null) {
-            	 request.setAttribute("producto", producto);
-            	 request.setAttribute("listarCategoria", modelo.listarCategoria());
-            	 String jsp = "/Producto/fragments/formEditar.jsp";
-                  request.getRequestDispatcher(jsp).forward(request, response);
-            }else {
-            	response.sendRedirect(request.getContextPath()+"/error404.jsp");
+            if (producto != null) {
+                request.setAttribute("producto", producto);
+                request.setAttribute("listarCategoria", modelo.listarCategoria());
+                String jsp = "/Producto/fragments/formEditar.jsp";
+                request.getRequestDispatcher(jsp).forward(request, response);
+            } else {
+                response.sendRedirect(request.getContextPath() + "/error404.jsp");
             }
 
         } catch (ServletException | IOException e) {
@@ -115,7 +117,7 @@ public class ProductoController extends HttpServlet {
     }
 
     // INSERTAR PRODUCTO
- // INSERTAR PRODUCTO
+    // INSERTAR PRODUCTO
     private void insertar(HttpServletRequest request, HttpServletResponse response, boolean esAjax) {
         try {
             Producto p = new Producto();
@@ -148,7 +150,7 @@ public class ProductoController extends HttpServlet {
         }
     }
 
- // MODIFICAR PRODUCTO
+    // MODIFICAR PRODUCTO
     private void modificar(HttpServletRequest request, HttpServletResponse response, boolean esAjax) {
         try {
             Producto p = new Producto();
@@ -225,4 +227,3 @@ public class ProductoController extends HttpServlet {
         processRequest(request, response);
     }
 }
-

@@ -20,49 +20,52 @@ import com.proyPetStore.model.CategoriaModel;
 @WebServlet("/CategoriaController")
 public class CategoriaController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
-	CategoriaModel modelo =  new CategoriaModel();
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public CategoriaController() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+	CategoriaModel modelo = new CategoriaModel();
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public CategoriaController() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		String opc = request.getParameter("op");
 		if (opc == null) {
 			listar(request, response);
 			return;
-		}// Detectar si es AJAX
-        boolean esAjax = opc.endsWith("Ajax");
+		} // Detectar si es AJAX
+		boolean esAjax = opc.endsWith("Ajax");
 		switch (opc) {
-		case "listar":
-			listar(request, response);
-			break;
-		case "nuevo":
-			cargarFormularioNuevo(request, response);
-			break;
-		case "editar":
-			cargarFormularioEditar(request, response);
-			break;
-		case "insertar":
-			insertar(request, response, false);
-			break;
-		case "modificar":
-			modificar(request, response, esAjax);
-			break;
-		case "eliminar":
-			eliminar(request, response);
-			break;
-		case "reporte":
-			break;
-		default: listar(request, response);
-			break;
+			case "listar":
+				listar(request, response);
+				break;
+			case "nuevo":
+				cargarFormularioNuevo(request, response);
+				break;
+			case "editar":
+				cargarFormularioEditar(request, response);
+				break;
+			case "insertarAjax":
+			case "insertar":
+				insertar(request, response, false);
+				break;
+			case "modificarAjax":
+			case "modificar":
+				modificar(request, response, esAjax);
+				break;
+			case "eliminar":
+				eliminar(request, response);
+				break;
+			case "reporte":
+				break;
+			default:
+				listar(request, response);
+				break;
 
 		}
 
@@ -78,36 +81,38 @@ public class CategoriaController extends HttpServlet {
 		}
 
 	}
-	private void cargarFormularioNuevo(HttpServletRequest request, HttpServletResponse response) {
-	    try {
-	        response.setContentType("text/html; charset=UTF-8");
-	        
 
-	        String jsp = "/Categoria/fragments/formNuevo.jsp";
-	        request.getRequestDispatcher(jsp).forward(request, response);
-	    } catch (ServletException | IOException e) {
-	        Logger.getLogger(CategoriaController.class.getName()).log(Level.SEVERE, null, e);
-	    }
-	}
-	private void cargarFormularioEditar(HttpServletRequest request, HttpServletResponse response) {
+	private void cargarFormularioNuevo(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			response.setContentType("text/html; charset=UTF-8");
-			String id = request.getParameter("id");
-			Categoria c = modelo.obtenerCategoria(Integer.parseInt(id));
-			
-	        request.setAttribute("categoria", c);
 
-			String jsp =  "/Categoria/fragments/formEditar.jsp";
+			String jsp = "/Categoria/fragments/formNuevo.jsp";
 			request.getRequestDispatcher(jsp).forward(request, response);
 		} catch (ServletException | IOException e) {
 			Logger.getLogger(CategoriaController.class.getName()).log(Level.SEVERE, null, e);
 		}
 	}
+
+	private void cargarFormularioEditar(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			response.setContentType("text/html; charset=UTF-8");
+			String id = request.getParameter("id");
+			Categoria c = modelo.obtenerCategoria(Integer.parseInt(id));
+
+			request.setAttribute("categoria", c);
+
+			String jsp = "/Categoria/fragments/formEditar.jsp";
+			request.getRequestDispatcher(jsp).forward(request, response);
+		} catch (ServletException | IOException e) {
+			Logger.getLogger(CategoriaController.class.getName()).log(Level.SEVERE, null, e);
+		}
+	}
+
 	private void insertar(HttpServletRequest request, HttpServletResponse response, boolean esAjax) {
 
 		try {
 
-			Categoria c = new Categoria();			
+			Categoria c = new Categoria();
 			c.setNombreCat(request.getParameter("nombreCat"));
 			int resultado = modelo.insertarCategoria(c);
 
@@ -143,40 +148,40 @@ public class CategoriaController extends HttpServlet {
 	}
 
 	private void modificar(HttpServletRequest request, HttpServletResponse response, boolean esAjax) {
-	    try {
-	        Categoria c = new Categoria();
-	        c.setId_categoria(Integer.parseInt(request.getParameter("id_categoria")));
-	        c.setNombreCat(request.getParameter("nombreCat"));	      
+		try {
+			Categoria c = new Categoria();
+			c.setId_categoria(Integer.parseInt(request.getParameter("id_categoria")));
+			c.setNombreCat(request.getParameter("nombreCat"));
 
-	        int resultado = modelo.modificarCategoria(c);
+			int resultado = modelo.modificarCategoria(c);
 
-	        if (esAjax) {
-	            enviarJSON(response, resultado > 0,
-	                    resultado > 0 ? "Categoria modificado exitosamente" : "Error al modificar");
-	        } else {
-	            response.setContentType("text/html; charset=UTF-8");
-	            if (resultado > 0) {
-	                request.getSession().setAttribute("mensaje", "Modificación exitosa");
-	            } else {
-	                request.getSession().setAttribute("mensaje", "Modificación fallida");
-	            }
-	            listar(request, response);
-	        }
-	    } catch (Exception e) {
-	        e.printStackTrace();
+			if (esAjax) {
+				enviarJSON(response, resultado > 0,
+						resultado > 0 ? "Categoria modificado exitosamente" : "Error al modificar");
+			} else {
+				response.setContentType("text/html; charset=UTF-8");
+				if (resultado > 0) {
+					request.getSession().setAttribute("mensaje", "Modificación exitosa");
+				} else {
+					request.getSession().setAttribute("mensaje", "Modificación fallida");
+				}
+				listar(request, response);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 
-	        if (esAjax) {
-	            enviarJSON(response, false, "Error: " + e.getMessage());
-	        } else {
-	            try {
-	                response.setContentType("text/html; charset=UTF-8");
-	                request.getSession().setAttribute("mensaje", "Error: " + e.getMessage());
-	                listar(request, response);
-	            } catch (Exception ex) {
-	                ex.printStackTrace();
-	            }
-	        }
-	    }
+			if (esAjax) {
+				enviarJSON(response, false, "Error: " + e.getMessage());
+			} else {
+				try {
+					response.setContentType("text/html; charset=UTF-8");
+					request.getSession().setAttribute("mensaje", "Error: " + e.getMessage());
+					listar(request, response);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		}
 	}
 
 	private void eliminar(HttpServletRequest request, HttpServletResponse response) {
@@ -194,19 +199,20 @@ public class CategoriaController extends HttpServlet {
 		}
 		listar(request, response);
 	}
+
 	private void enviarJSON(HttpServletResponse response, boolean success, String mensaje) {
 		try {
-			
+
 			response.reset();
-			
+
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
 			response.setHeader("Cache-Control", "no-cache");
-			
+
 			String mensajeLimpio = mensaje.replace("\"", "'").replace("\n", " ").replace("\r", " ");
 
 			String json = "{\"success\":" + success + ",\"mensaje\":\"" + mensajeLimpio + "\"}";
-			
+
 			PrintWriter out = response.getWriter();
 			out.write(json);
 			out.flush();
@@ -232,6 +238,5 @@ public class CategoriaController extends HttpServlet {
 		// TODO Auto-generated method stub
 		processRequest(request, response);
 	}
-
 
 }

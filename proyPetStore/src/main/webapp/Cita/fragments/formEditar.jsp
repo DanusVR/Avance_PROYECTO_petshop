@@ -16,7 +16,7 @@
 										<h3 class="mb-4 text-primary">✏️ Editar Cita</h3>
 
 										<form action="<%=url%>CitaController" method="POST"
-											onsubmit="return validarCita()">
+											onsubmit="return submitFormAjax(event, 'modalCita', '/CitaController?op=listar', 'validarCita')">
 											<input type="hidden" name="op" value="modificar"> <input type="hidden"
 												name="id_cita" value="<%=cita.getId_cita()%>">
 

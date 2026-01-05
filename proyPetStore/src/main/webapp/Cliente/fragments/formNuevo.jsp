@@ -5,8 +5,9 @@
     <div class="card shadow">
         <div class="card-body">
 
-            <form action="<%=request.getContextPath()%>/ClienteController?op=insertar" method="post"
-                onsubmit="return validarCliente()">
+            <form action="<%=request.getContextPath()%>/ClienteController" method="post"
+                onsubmit="return submitFormAjax(event, 'modalCliente', '/ClienteController?op=listar', 'validarCliente')">
+                <input type="hidden" name="op" value="insertar">
 
                 <div class="mb-3">
                     <label class="form-label">Dni:</label>

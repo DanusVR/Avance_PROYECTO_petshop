@@ -19,7 +19,7 @@
 							<div class="card shadow">
 								<div class="card-body">
 									<form action="<%=request.getContextPath()%>/ProductoController" method="post"
-										onsubmit="return validarProducto()">
+										onsubmit="return submitFormAjax(event, 'modalProducto', '/ProductoController?op=listar', 'validarProducto')">
 										<input type="hidden" name="op" value="insertar">
 
 										<div class="mb-3">
@@ -81,9 +81,9 @@
 
 										<div class="mb-3">
 											<label class="form-label">Fecha de Registro:</label> <input type="date"
-												id="fecha_registro" name="fecha_registro" class="form-control" value="<%=producto.getFecha_registro() != null
-		? new java.text.SimpleDateFormat(" yyyy-MM-dd").format(producto.getFecha_registro()) : "" %>"
-											required>
+												id="fecha_registro" name="fecha_registro" class="form-control"
+												value='<%=producto.getFecha_registro() != null ? new java.text.SimpleDateFormat("yyyy-MM-dd").format(producto.getFecha_registro()) : "" %>'
+												required>
 										</div>
 
 										<button type="submit" class="btn btn-primary w-100">Guardar</button>

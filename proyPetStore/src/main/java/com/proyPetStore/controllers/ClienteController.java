@@ -55,9 +55,11 @@ public class ClienteController extends HttpServlet {
 			case "editar":
 				cargarFormularioEditar(request, response);
 				break;
+			case "insertarAjax":
 			case "insertar":
-				insertar(request, response, false);
+				insertar(request, response, esAjax);
 				break;
+			case "modificarAjax":
 			case "modificar":
 				modificar(request, response, esAjax);
 				break;

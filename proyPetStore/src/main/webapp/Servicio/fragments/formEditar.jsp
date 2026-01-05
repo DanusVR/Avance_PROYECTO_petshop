@@ -22,7 +22,7 @@
                                 <div class="card-body">
 
                                     <form action="<%=url%>ServicioController" method="POST"
-                                        onsubmit="return validarServicio()">
+                                        onsubmit="return submitFormAjax(event, 'modalServicio', '/ServicioController?op=listar', 'validarServicio')">
 
                                         <input type="hidden" name="op" value="modificar">
                                         <input type="hidden" name="id_servicio" value="<%=servicio.getId_servicio()%>">

@@ -1,6 +1,7 @@
 <!-- FORMULARIO -->
-<form action="<%=request.getContextPath()%>/CategoriaController?op=insertar" method="post"
-    onsubmit="return validarCategoria()">
+<form action="<%=request.getContextPath()%>/CategoriaController" method="post"
+    onsubmit="return submitFormAjax(event, 'modalCategoria', '/CategoriaController?op=listar', 'validarCategoria')">
+    <input type="hidden" name="op" value="insertar">
 
     <div class="mb-3">
         <label class="form-label">Nombre de Categoría:</label>

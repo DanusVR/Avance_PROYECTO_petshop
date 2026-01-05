@@ -10,7 +10,7 @@
                     <h4 class="text-center mb-3">📅 Registrar Nueva Cita</h4>
 
                     <form action="<%=request.getContextPath()%>/CitaController" method="POST"
-                        onsubmit="return validarCita()">
+                        onsubmit="return submitFormAjax(event, 'modalCita', '/CitaController?op=listar', 'validarCita')">
                         <input type="hidden" name="op" value="insertar">
 
                         <!-- MASCOTA -->

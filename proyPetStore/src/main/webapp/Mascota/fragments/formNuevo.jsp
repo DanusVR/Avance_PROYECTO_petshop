@@ -17,8 +17,8 @@
 
                             <div class="card shadow-sm col-md-6 mx-auto">
                                 <div class="card-body">
-                                    <form action="<%=request.getContextPath()%>/MascotaController?op=insertar"
-                                        method="post">
+                                    <form action="<%=request.getContextPath()%>/MascotaController" method="post"
+                                        onsubmit="return submitFormAjax(event, 'modalMascota', '/MascotaController?op=listar', null)">
                                         <input type="hidden" name="op" value="insertar">
 
                                         <div class="mb-3">

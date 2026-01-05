@@ -24,7 +24,7 @@
 									</h4>
 
 									<form action="<%=url%>HistorialMedicoController" method="POST"
-										onsubmit="return validarHistorial()">
+										onsubmit="return submitFormAjax(event, 'modalHistorial', '/HistorialMedicoController?op=listar', 'validarHistorial')">
 										<input type="hidden" name="op" value="<%=esEditar ? " modificar" : "insertar"
 											%>">
 										<% if (esEditar) { %>

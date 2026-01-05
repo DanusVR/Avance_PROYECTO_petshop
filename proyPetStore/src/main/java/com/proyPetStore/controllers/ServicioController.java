@@ -44,38 +44,40 @@ public class ServicioController extends HttpServlet {
         boolean esAjax = opc.endsWith("Ajax");
 
         switch (opc) {
-        case "listar":
-            listar(request, response);
-            break;
+            case "listar":
+                listar(request, response);
+                break;
 
-        case "nuevo":
-            cargarFormularioNuevo(request, response);
-            break;
+            case "nuevo":
+                cargarFormularioNuevo(request, response);
+                break;
 
-        case "editar":
-            cargarFormularioEditar(request, response);
-            break;
+            case "editar":
+                cargarFormularioEditar(request, response);
+                break;
 
-        case "insertar":
-            insertar(request, response, esAjax);
-            break;
+            case "insertarAjax":
+            case "insertar":
+                insertar(request, response, esAjax);
+                break;
 
-        case "modificar":
-            modificar(request, response, esAjax);
-            break;
+            case "modificarAjax":
+            case "modificar":
+                modificar(request, response, esAjax);
+                break;
 
-        case "eliminar":
-            eliminar(request, response);
-            break;
+            case "eliminar":
+                eliminar(request, response);
+                break;
 
-        default:
-            listar(request, response);
-            break;
+            default:
+                listar(request, response);
+                break;
         }
     }
 
     // LISTAR
-  
+
     private void listar(HttpServletRequest request, HttpServletResponse response) {
         try {
             response.setContentType("text/html; charset=UTF-8");
@@ -111,7 +113,6 @@ public class ServicioController extends HttpServlet {
             int id = Integer.parseInt(request.getParameter("id"));
             Servicio s = modelo.obtenerServicio(id);
 
-           
             request.setAttribute("listaMascotas", mascotaModel.listarMascota());
 
             request.setAttribute("servicio", s);
@@ -135,14 +136,14 @@ public class ServicioController extends HttpServlet {
             s.setEstado(request.getParameter("estado"));
 
             int resultado = modelo.insertarServicio(s);
-            
+
             // --- NUEVO: generar historial automático ---
             if (resultado > 0) {
                 Historial_Medico hm = new Historial_Medico();
                 hm.setId_mascota(s.getId_mascota());
                 hm.setFecha(new java.sql.Date(System.currentTimeMillis())); // Fecha actual o puedes usar otra
                 hm.setDescripcion("Servicio: " + s.getNombre() +
-                                  (s.getDescripcion() != null ? " - " + s.getDescripcion() : ""));
+                        (s.getDescripcion() != null ? " - " + s.getDescripcion() : ""));
                 HistorialMedicoModel historialModel = new HistorialMedicoModel();
                 historialModel.insertar(hm);
             }
@@ -169,7 +170,7 @@ public class ServicioController extends HttpServlet {
         }
     }
     // MODIFICAR
-  
+
     private void modificar(HttpServletRequest request, HttpServletResponse response, boolean esAjax) {
         try {
             Servicio s = new Servicio();
@@ -177,7 +178,7 @@ public class ServicioController extends HttpServlet {
             s.setId_servicio(Integer.parseInt(request.getParameter("id_servicio")));
             s.setNombre(request.getParameter("nombre"));
             s.setTipo(request.getParameter("tipo"));
-            s.setId_mascota(Integer.parseInt(request.getParameter("id_mascota")));  // <-- IMPORTANTE
+            s.setId_mascota(Integer.parseInt(request.getParameter("id_mascota"))); // <-- IMPORTANTE
             s.setDescripcion(request.getParameter("descripcion"));
             s.setPrecio(Double.parseDouble(request.getParameter("precio")));
             s.setEstado(request.getParameter("estado"));
@@ -221,7 +222,6 @@ public class ServicioController extends HttpServlet {
         listar(request, response);
     }
 
-
     // JSON RESPONSE
 
     private void enviarJSON(HttpServletResponse response, boolean success, String mensaje) {
@@ -251,6 +251,5 @@ public class ServicioController extends HttpServlet {
             throws ServletException, IOException {
         processRequest(request, response);
     }
-
 
 }

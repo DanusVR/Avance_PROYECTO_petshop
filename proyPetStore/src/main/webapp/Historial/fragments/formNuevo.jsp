@@ -12,8 +12,9 @@
 
 						<div class="card shadow col-md-6 mx-auto">
 							<div class="card-body">
-								<form action="<%=request.getContextPath()%>/HistorialMedicoController?op=insertar"
-									method="post" onsubmit="return validarHistorial()">
+								<form action="<%=request.getContextPath()%>/HistorialMedicoController" method="post"
+									onsubmit="return submitFormAjax(event, 'modalHistorial', '/HistorialMedicoController?op=listar', 'validarHistorial')">
+									<input type="hidden" name="op" value="insertar">
 
 									<!-- Mascota -->
 									<div class="mb-3">

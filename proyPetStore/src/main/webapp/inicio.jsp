@@ -711,6 +711,86 @@
 
                     return true;
                 }
+
+                function validarProveedor() {
+                    let ruc = document.getElementById("ruc").value.trim();
+                    let nombre = document.getElementById("nombre").value.trim();
+                    let tipo = document.getElementById("tipo").value;
+
+                    if (ruc === "" || ruc.length !== 11 || isNaN(ruc)) { alert("Ingrese un RUC válido (11 dígitos)"); return false; }
+                    if (nombre === "") { alert("El nombre es obligatorio"); return false; }
+                    if (tipo === "") { alert("Seleccione un tipo"); return false; }
+                    return true;
+                }
+
+                function validarUsuario() {
+                    const form = document.getElementById('formUsuario');
+                    if (form && !form.checkValidity()) {
+                        form.classList.add('was-validated');
+                        return false;
+                    }
+                    return true;
+                }
+
+                /**
+                 * Generic AJAX Form Submission Handler
+                 * @param {Event} event - The submit event
+                 * @param {string} modalId - The ID of the modal to close on success
+                 * @param {string} refreshUrl - The URL (fragment) to fetch to refresh the list
+                 * @param {string} validateFn - Name of the validation function to call (optional)
+                 */
+                function submitFormAjax(event, modalId, refreshUrl, validateFn) {
+                    event.preventDefault();
+
+                    if (validateFn && window[validateFn]) {
+                        if (!window[validateFn]()) return false;
+                    }
+
+                    const form = event.target;
+                    const formData = new FormData(form);
+                    const params = new URLSearchParams();
+
+                    for (const pair of formData.entries()) {
+                        params.append(pair[0], pair[1]);
+                    }
+
+                    // Append 'Ajax' to the operation if not already present
+                    let op = params.get("op");
+                    if (op && !op.endsWith("Ajax")) {
+                        params.set("op", op + "Ajax");
+                    }
+
+                    fetch(form.action, {
+                        method: 'POST',
+                        body: params,
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Close modal
+                                const modalEl = document.getElementById(modalId);
+                                const modal = bootstrap.Modal.getInstance(modalEl);
+                                if (modal) modal.hide();
+
+                                // Refresh list
+                                fetchFragment(refreshUrl);
+
+                                // Optional: Show success message (e.g. using a toast or alert)
+                                // alert(data.mensaje); 
+                            } else {
+                                alert("Error: " + data.mensaje);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert("Error de conexión al procesar la solicitud.");
+                        });
+
+                    return false;
+                }
             </script>
 
         </body>

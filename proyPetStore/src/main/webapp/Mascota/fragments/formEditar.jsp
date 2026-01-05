@@ -19,7 +19,8 @@
 
 							<div class="card shadow-sm">
 								<div class="card-body">
-									<form action="<%=url%>MascotaController" method="POST">
+									<form action="<%=url%>MascotaController" method="POST"
+										onsubmit="return submitFormAjax(event, 'modalMascota', '/MascotaController?op=listar', null)">
 										<input type="hidden" name="op" value="modificar"> <input type="hidden"
 											name="id_mascota" value="<%=mascota.getId_mascota()%>">
 
