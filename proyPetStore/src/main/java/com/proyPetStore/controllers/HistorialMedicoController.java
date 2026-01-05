@@ -28,7 +28,7 @@ public class HistorialMedicoController extends HttpServlet {
 
     HistorialMedicoModel model = new HistorialMedicoModel();
     MascotaModel modelMascota = new MascotaModel();
-    ServicioModel modelServicio = new ServicioModel(); // Para vincular con servicios
+    ServicioModel modelServicio = new ServicioModel(); 
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -131,7 +131,7 @@ public class HistorialMedicoController extends HttpServlet {
             throws ServletException, IOException {
         try {
             Historial_Medico hm = new Historial_Medico();
-            // me falta arreglar C:
+            
             // para vincular automáticamente la descripción y mascota
             String paramIdServicio = request.getParameter("id_servicio");
             if (paramIdServicio != null) {

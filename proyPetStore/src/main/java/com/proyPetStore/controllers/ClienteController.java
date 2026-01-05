@@ -90,9 +90,8 @@ public class ClienteController extends HttpServlet {
 		try {
 			response.setContentType("text/html; charset=UTF-8");
 			String id = request.getParameter("id");
-			Cliente c = modelo.obtenerCliente(Integer.parseInt(id));
+			Cliente c = modelo.obtenerCliente(Integer.parseInt(id));			
 			
-			 // PASO IMPORTANTE: pasar el cliente al JSP
 	        request.setAttribute("cliente", c);
 
 			String jsp =  "/Cliente/fragments/formEditar.jsp";

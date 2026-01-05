@@ -137,7 +137,7 @@ public class CompraController extends HttpServlet {
 
             Compras compra = new Compras();
             compra.setId_proveedor(idProveedor);
-            // compra.setTotal(total); // Se asignará después de calcular o verificar
+          
 
             // Obtener detalles desde el formulario (arrays)
             String[] productos = request.getParameterValues("id_producto");
@@ -159,16 +159,16 @@ public class CompraController extends HttpServlet {
                 det.setCantidad(cant);
                 det.setPrecio_unitario(prec);
 
-                // Calculamos subtotal para sumarlo al total general
+                // Calculamos subtotal 
                 double sub = cant * prec;
-                det.setSubtotal(sub); // Aunque en BD es calculado, lo seteamos por consistencia
+                det.setSubtotal(sub); 
 
                 totalCalculado += sub;
 
                 compra.getDetalles().add(det);
             }
 
-            // Usar el total calculado en el backend es mas seguro
+            //  total calculado en el backend 
             compra.setTotal(totalCalculado);
 
             int resultado = modelo.insertarCompra(compra);
