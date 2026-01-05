@@ -1,7 +1,10 @@
 <%@page contentType="text/html; charset=UTF-8" language="java" %>
     <% String nombre=(String) session.getAttribute("nombreCompleto"); String rol=(String) session.getAttribute("rol");
-        if(nombre==null){ response.sendRedirect(request.getContextPath() + "/LoginController" ); return; } String
-        currentUrl=request.getRequestURI(); String contextPath=request.getContextPath(); %>
+        if(nombre==null){ 
+        	response.sendRedirect(request.getContextPath() + "/LoginController" ); return;
+        	} String
+        currentUrl=request.getRequestURI(); 
+        	String contextPath=request.getContextPath(); %>
 
         <!DOCTYPE html>
         <html lang="es">

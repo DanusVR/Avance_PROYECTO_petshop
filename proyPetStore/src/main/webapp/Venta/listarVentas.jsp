@@ -82,7 +82,7 @@
 				<div class="modal fade" id="modalRecibo" tabindex="-1" aria-hidden="true">
 					<div class="modal-dialog modal-lg">
 						<div class="modal-content">
-							<div class="modal-header bg-primary text-white">
+							<div class="modal-header text-white" style="background-color: #ec8caa;">
 								<h5 class="modal-title">Recibo de Venta</h5>
 								<button type="button" class="btn-close btn-close-white"
 									data-bs-dismiss="modal"></button>

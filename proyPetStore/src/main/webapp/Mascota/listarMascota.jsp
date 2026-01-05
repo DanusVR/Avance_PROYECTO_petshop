@@ -103,7 +103,7 @@
                         <div class="modal fade" id="modalMascota" tabindex="-1">
                             <div class="modal-dialog modal-lg">
                                 <div class="modal-content">
-                                    <div class="modal-header bg-primary text-white">
+                                    <div class="modal-header text-white" style="background-color: #ec8caa;">
                                         <h5 class="modal-title">Gestión de Mascota</h5>
                                         <button type="button" class="btn-close btn-close-white"
                                             data-bs-dismiss="modal"></button>
@@ -119,7 +119,7 @@
                         <div class="modal fade" id="modalHistorial" tabindex="-1">
                             <div class="modal-dialog modal-xl">
                                 <div class="modal-content">
-                                    <div class="modal-header bg-info text-white">
+                                    <div class="modal-header text-white" style="background-color: #ec8caa;">
                                         <h5 class="modal-title">🩺 Historial Médico</h5>
                                         <button type="button" class="btn-close btn-close-white"
                                             data-bs-dismiss="modal"></button>
@@ -133,7 +133,7 @@
 
                         <!-- Bootstrap JS -->
                         <script
-                            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>                      
+                            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 
                     </body>

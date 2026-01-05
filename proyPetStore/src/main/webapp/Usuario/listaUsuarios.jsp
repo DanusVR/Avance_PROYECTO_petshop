@@ -60,7 +60,8 @@
                                                 for (Usuario usuario : listaUsuarios) {
                                                 String badgeEstado = "ACTIVO".equals(usuario.getEstado()) ? "bg-success"
                                                 : "bg-danger";
-                                                String badgeRol = "ADMIN".equals(usuario.getRol()) ? "bg-warning  text-dark" : "bg-secondary";
+                                                String badgeRol = "ADMIN".equals(usuario.getRol()) ? "bg-warning     text-dark" : "bg-secondary";
+                                           
                                                 %>
                                                 <tr>
                                                     <td><code><%=usuario.getIdUsuario()%></code></td>
@@ -120,7 +121,7 @@
                     data-bs-keyboard="false">
                     <div class="modal-dialog modal-dialog-centered modal-lg">
                         <div class="modal-content">
-                            <div class="modal-header bg-primary text-white">
+                            <div class="modal-header text-white" style="background-color: #ec8caa;">
                                 <h5 class="modal-title" id="modalUsuarioLabel">
                                     <i class="fas fa-user-edit"></i> Usuario
                                 </h5>
