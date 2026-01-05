@@ -163,7 +163,8 @@
             <div class="sidebar">
                 <div class="logo"><i class="fas fa-paw"></i> PETSHOP</div>
                 <div class="menu">
-                    <a class="active"><i class="fas fa-chart-line"></i> Dashboard</a>
+                    <a class="active" href='inicio.jsp'><i class="fas fa-chart-line"></i> Dashboard</a>
+                    
                     <a id="menuVentas"><i class="fas fa-shopping-cart"></i> Ventas</a>
                     <div id="submenuVentas" class="submenu">
                         <a onclick="fetchFragment('/VentaController?op=nuevo')">➕ Nueva Venta</a>
